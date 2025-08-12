@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WTT Swing Trader MTF R1.6 - Quick Reference Guide</title>
+    <title>WTT Swing Trader MTF R1.7 - Quick Reference Guide</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -140,20 +140,46 @@
             color: #155724;
             margin-top: 0;
         }
+        .status-table {
+            background: #2c3e50;
+            color: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+        }
+        .status-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .status-table th, .status-table td {
+            padding: 8px;
+            text-align: center;
+            border: 1px solid #34495e;
+        }
+        .status-table th {
+            background: #34495e;
+        }
+        .green-bg { background: #27ae60; }
+        .red-bg { background: #e74c3c; }
+        .gray-bg { background: #7f8c8d; }
+        .yellow-bg { background: #f39c12; }
+        .orange-bg { background: #e67e22; }
+        .blue-bg { background: #3498db; }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>WTT Swing Trader MTF R1.6</h1>
+            <h1>WTT Swing Trader MTF R1.7</h1>
             <p>WaveRider Trading Technologies - Multi-Timeframe Swing Trading Indicator</p>
             <p>Quick Reference Guide</p>
         </div>
         
         <div class="content">
             <div class="version-info">
-                <h4>🆕 Version R1.6 - Dynamic Boundary Line System</h4>
-                <p>New feature: Dynamic boundary line system with historical reference points for enhanced visual analysis.</p>
+                <h4>🆕 Version R1.7 - Enhanced Status Table & Color Coding</h4>
+                <p>New feature: Redesigned status table with individual color-coded columns and enhanced visual feedback system.</p>
             </div>
 
             <div class="section">
@@ -224,7 +250,61 @@
             </div>
 
             <div class="section">
-                <h2>📈 Dynamic Boundary Line System (NEW R1.6)</h2>
+                <h2>📈 Enhanced Status Table (NEW R1.7)</h2>
+                <div class="status-table">
+                    <table>
+                        <tr>
+                            <th>D</th>
+                            <th>4H</th>
+                            <th>1H</th>
+                            <th>CTF</th>
+                        </tr>
+                        <tr>
+                            <td class="green-bg">BULL</td>
+                            <td class="green-bg">BULL</td>
+                            <td class="green-bg">BULL</td>
+                            <td class="green-bg">BULL</td>
+                        </tr>
+                        <tr>
+                            <td class="red-bg">RSI:65.2</td>
+                            <td class="green-bg">MACD:BULL</td>
+                            <td class="yellow-bg">ATR:HIGH</td>
+                            <td class="orange-bg">VOL:HIGH</td>
+                        </tr>
+                        <tr>
+                            <td class="green-bg" colspan="4">SWING LONG</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4>Trend Row Color Coding</h4>
+                        <p><strong>Green:</strong> Bullish trend (BULL)</p>
+                        <p><strong>Red:</strong> Bearish trend (BEAR)</p>
+                        <p><strong>Gray:</strong> Neutral trend (NEUT)</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>Indicators Row Color Coding</h4>
+                        <p><strong>RSI:</strong> Red (overbought), Green (oversold), White (normal)</p>
+                        <p><strong>MACD:</strong> Green (bullish), Red (bearish)</p>
+                        <p><strong>ATR:</strong> Yellow (high), Gray (normal)</p>
+                        <p><strong>Volume:</strong> Orange (high), Blue (low), Gray (normal)</p>
+                    </div>
+                </div>
+                <div class="alert-box">
+                    <h4>💡 Status Table Features</h4>
+                    <ul>
+                        <li><strong>Individual Timeframe Columns:</strong> Each timeframe has its own column for clear trend alignment</li>
+                        <li><strong>Color-Coded Values:</strong> Intuitive color system for quick status assessment</li>
+                        <li><strong>Persistent Last Trade:</strong> Shows the most recent signal type that fired</li>
+                        <li><strong>Compact Layout:</strong> Optimized for maximum information in minimal space</li>
+                        <li><strong>Real-Time Updates:</strong> All values update dynamically with market conditions</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>📈 Dynamic Boundary Line System</h2>
                 <div class="feature-grid">
                     <div class="feature-card">
                         <h4>Lower Boundary Line</h4>
@@ -269,8 +349,8 @@
                         <p>Diamond-shaped markers indicating high volatility exit conditions based on ATR analysis.</p>
                     </div>
                     <div class="feature-card">
-                        <h4>Status Table</h4>
-                        <p>Real-time display showing trend status, indicator values, active signals, and trade status.</p>
+                        <h4>Enhanced Status Table</h4>
+                        <p>Real-time display with color-coded values showing trend status, indicator values, and trade history.</p>
                     </div>
                 </div>
             </div>
@@ -338,23 +418,18 @@ Trend Change Alerts Include:
                     <tbody>
                         <tr>
                             <td>1</td>
-                            <td>Trend (Daily)</td>
-                            <td>BULLISH/BEARISH/NEUTRAL based on daily EMA alignment</td>
+                            <td>Trend (All TF)</td>
+                            <td>Individual timeframe trend status with color coding</td>
                         </tr>
                         <tr>
                             <td>2</td>
-                            <td>Indicators (CTF)</td>
-                            <td>RSI value, MACD status (BULL/BEAR), ATR status (HIGH/NORM), Volume status (HIGH/NORM)</td>
+                            <td>Indicators</td>
+                            <td>Color-coded RSI, MACD, ATR, and Volume status</td>
                         </tr>
                         <tr>
                             <td>3</td>
-                            <td>Signal (Daily)</td>
-                            <td>LONG/SHORT/NONE based on current signal conditions</td>
-                        </tr>
-                        <tr>
-                            <td>4</td>
-                            <td>Active Trade</td>
-                            <td>YES/NO indicating if any trade is currently active</td>
+                            <td>Last Trade</td>
+                            <td>Type of the last signal that fired (spans all columns)</td>
                         </tr>
                     </tbody>
                 </table>
@@ -393,7 +468,11 @@ Trend Change Alerts Include:
                 <h2>📝 Version History Summary</h2>
                 <div class="feature-grid">
                     <div class="feature-card">
-                        <h4>R1.6 (Current)</h4>
+                        <h4>R1.7 (Current)</h4>
+                        <p>Enhanced status table with color coding and improved visual feedback</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>R1.6</h4>
                         <p>Dynamic boundary line system with historical reference points</p>
                     </div>
                     <div class="feature-card">
@@ -401,11 +480,7 @@ Trend Change Alerts Include:
                         <p>Performance analytics enhancement and table consolidation</p>
                     </div>
                     <div class="feature-card">
-                        <h4>R1.4</h4>
-                        <p>Comprehensive feature integration and multi-timeframe functionality</p>
-                    </div>
-                    <div class="feature-card">
-                        <h4>R1.0-R1.3</h4>
+                        <h4>R1.0-R1.4</h4>
                         <p>Core functionality, alerts, visual enhancements, and UI improvements</p>
                     </div>
                 </div>
