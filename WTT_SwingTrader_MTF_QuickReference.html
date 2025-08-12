@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WTT Swing Trader MTF R1.6 - Quick Reference Guide</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: 300;
+        }
+        .header p {
+            margin: 10px 0 0 0;
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        .content {
+            padding: 30px;
+        }
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border-radius: 10px;
+            background: #f8f9fa;
+            border-left: 5px solid #ff6b6b;
+        }
+        .section h2 {
+            color: #2c3e50;
+            margin-top: 0;
+            font-size: 1.8em;
+        }
+        .section h3 {
+            color: #34495e;
+            margin-top: 20px;
+            font-size: 1.4em;
+        }
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .feature-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-left: 4px solid #3498db;
+        }
+        .feature-card h4 {
+            color: #2c3e50;
+            margin-top: 0;
+            font-size: 1.2em;
+        }
+        .signal-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .signal-table th {
+            background: #34495e;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+        .signal-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        .signal-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        .bullish {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        .bearish {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        .neutral {
+            color: #7f8c8d;
+            font-weight: bold;
+        }
+        .code-block {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+        .alert-box {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        .alert-box h4 {
+            color: #856404;
+            margin-top: 0;
+        }
+        .version-info {
+            background: #e8f5e8;
+            border: 1px solid #c3e6c3;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        .version-info h4 {
+            color: #155724;
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>WTT Swing Trader MTF R1.6</h1>
+            <p>WaveRider Trading Technologies - Multi-Timeframe Swing Trading Indicator</p>
+            <p>Quick Reference Guide</p>
+        </div>
+        
+        <div class="content">
+            <div class="version-info">
+                <h4>🆕 Version R1.6 - Dynamic Boundary Line System</h4>
+                <p>New feature: Dynamic boundary line system with historical reference points for enhanced visual analysis.</p>
+            </div>
+
+            <div class="section">
+                <h2>🎯 Core Concept</h2>
+                <p>The WTT Swing Trader MTF combines multi-timeframe trend analysis with current timeframe signal generation to identify high-probability swing trading opportunities. The indicator requires alignment across Daily, 4-hour, 1-hour, and current timeframes for maximum signal reliability.</p>
+            </div>
+
+            <div class="section">
+                <h2>📊 Multi-Timeframe Analysis</h2>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4>Daily Timeframe (Primary)</h4>
+                        <p>Establishes the overall market trend using EMA alignment (12, 26, 50 periods). All signals require daily trend confirmation.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>4-Hour Timeframe</h4>
+                        <p>Provides intermediate trend confirmation. Must align with daily trend for signal validation.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>1-Hour Timeframe</h4>
+                        <p>Offers short-term trend confirmation. Must align with higher timeframes for signal validation.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>Current Timeframe</h4>
+                        <p>Generates entry signals based on local momentum and volume confirmation.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🚦 Signal Generation</h2>
+                <table class="signal-table">
+                    <thead>
+                        <tr>
+                            <th>Signal Type</th>
+                            <th>Requirements</th>
+                            <th>Visual Indicator</th>
+                            <th>Alert</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="bullish">Swing Long Entry</td>
+                            <td>All timeframes bullish + MACD > Signal + RSI 40-80 + Volume high + Close > Fast EMA</td>
+                            <td>Large Orange Triangle (Up)</td>
+                            <td>🟢 SWING LONG ENTRY</td>
+                        </tr>
+                        <tr>
+                            <td class="bearish">Swing Short Entry</td>
+                            <td>All timeframes bearish + MACD < Signal + RSI 20-60 + Volume high + Close < Fast EMA</td>
+                            <td>Large Purple Triangle (Down)</td>
+                            <td>🔴 SWING SHORT ENTRY</td>
+                        </tr>
+                        <tr>
+                            <td class="bullish">Trend Change Bullish</td>
+                            <td>Current timeframe transitions to bullish</td>
+                            <td>Small Orange Triangle (Up)</td>
+                            <td>🟢 TREND CHANGE: BULLISH</td>
+                        </tr>
+                        <tr>
+                            <td class="bearish">Trend Change Bearish</td>
+                            <td>Current timeframe transitions to bearish</td>
+                            <td>Small Purple Triangle (Down)</td>
+                            <td>🔴 TREND CHANGE: BEARISH</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="section">
+                <h2>📈 Dynamic Boundary Line System (NEW R1.6)</h2>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4>Lower Boundary Line</h4>
+                        <p><strong>Trigger:</strong> Swing long entry OR trend change bullish</p>
+                        <p><strong>Origin:</strong> Lower boundary level from 3 bars before current price</p>
+                        <p><strong>Style:</strong> Red dotted horizontal line, 20 bars long</p>
+                        <p><strong>Behavior:</strong> Continuously updates to maintain 3-bar historical reference</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>Upper Boundary Line</h4>
+                        <p><strong>Trigger:</strong> Swing short entry OR trend change bearish</p>
+                        <p><strong>Origin:</strong> Upper boundary level from 3 bars before current price</p>
+                        <p><strong>Style:</strong> Red dotted horizontal line, 20 bars long</p>
+                        <p><strong>Behavior:</strong> Continuously updates to maintain 3-bar historical reference</p>
+                    </div>
+                </div>
+                <div class="alert-box">
+                    <h4>💡 Boundary Line Features</h4>
+                    <ul>
+                        <li><strong>Historical Reference:</strong> Lines originate from boundary levels 3 bars before current price</li>
+                        <li><strong>Perfectly Horizontal:</strong> No slope - clean visual reference</li>
+                        <li><strong>Dynamic Updates:</strong> Lines move forward with current price while maintaining historical origin</li>
+                        <li><strong>Auto-Deletion:</strong> Lines disappear when price trades through boundary levels</li>
+                        <li><strong>Signal-Specific:</strong> Different lines for bullish vs bearish signals</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🎨 Visual Elements</h2>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4>Trend Cloud</h4>
+                        <p>Dynamic cloud around price showing trend boundaries with customizable transparency (65% default).</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>EMA Lines</h4>
+                        <p>Optional display of Fast (12), Slow (26), and Trend (50) EMAs for technical analysis.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>ATR Exit Signals</h4>
+                        <p>Diamond-shaped markers indicating high volatility exit conditions based on ATR analysis.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>Status Table</h4>
+                        <p>Real-time display showing trend status, indicator values, active signals, and trade status.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>⚙️ Settings & Configuration</h2>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4>Display Toggles</h4>
+                        <ul>
+                            <li><strong>Show Entry/Exit Signals:</strong> Toggle main signal visibility</li>
+                            <li><strong>Show Trend Direction:</strong> Toggle trend cloud display</li>
+                            <li><strong>Show EMAs:</strong> Toggle EMA line visibility</li>
+                        </ul>
+                    </div>
+                    <div class="feature-card">
+                        <h4>Color Scheme</h4>
+                        <ul>
+                            <li><strong>Bullish:</strong> Orange (default)</li>
+                            <li><strong>Bearish:</strong> Purple (default)</li>
+                            <li><strong>Neutral:</strong> Gray (default)</li>
+                        </ul>
+                    </div>
+                    <div class="feature-card">
+                        <h4>Hardcoded Parameters</h4>
+                        <ul>
+                            <li><strong>EMA:</strong> 12, 26, 50 periods</li>
+                            <li><strong>MACD:</strong> 12, 26, 9 periods</li>
+                            <li><strong>RSI:</strong> 14 periods</li>
+                            <li><strong>Volume MA:</strong> 20 periods</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🔔 Alert System</h2>
+                <p>The indicator provides comprehensive alerts with detailed market information:</p>
+                <div class="code-block">
+Entry Alerts Include:
+• Signal type and direction
+• Current price (5 decimal precision)
+• RSI value
+• MACD line value
+• Symbol information
+
+Trend Change Alerts Include:
+• Trend transition information
+• All MACD components (line, signal, histogram)
+• Current trend status
+• Complete market context
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>📋 Status Table Information</h2>
+                <table class="signal-table">
+                    <thead>
+                        <tr>
+                            <th>Row</th>
+                            <th>Information</th>
+                            <th>Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Trend (Daily)</td>
+                            <td>BULLISH/BEARISH/NEUTRAL based on daily EMA alignment</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Indicators (CTF)</td>
+                            <td>RSI value, MACD status (BULL/BEAR), ATR status (HIGH/NORM), Volume status (HIGH/NORM)</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>Signal (Daily)</td>
+                            <td>LONG/SHORT/NONE based on current signal conditions</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>Active Trade</td>
+                            <td>YES/NO indicating if any trade is currently active</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="section">
+                <h2>🎯 Trading Strategy</h2>
+                <div class="alert-box">
+                    <h4>Conservative Approach (Default)</h4>
+                    <p>The indicator uses conservative settings by default, requiring strong multi-timeframe alignment for signal generation. This reduces false signals and focuses on high-probability trading opportunities.</p>
+                </div>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4>Entry Criteria</h4>
+                        <ul>
+                            <li>Multi-timeframe trend alignment</li>
+                            <li>MACD momentum confirmation</li>
+                            <li>RSI in optimal ranges</li>
+                            <li>Above-average volume</li>
+                            <li>Price relative to fast EMA</li>
+                        </ul>
+                    </div>
+                    <div class="feature-card">
+                        <h4>Risk Management</h4>
+                        <ul>
+                            <li>Use boundary lines as support/resistance</li>
+                            <li>Monitor trend cloud breaches</li>
+                            <li>Watch for ATR exit signals</li>
+                            <li>Follow multi-timeframe trend direction</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>📝 Version History Summary</h2>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4>R1.6 (Current)</h4>
+                        <p>Dynamic boundary line system with historical reference points</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>R1.5</h4>
+                        <p>Performance analytics enhancement and table consolidation</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>R1.4</h4>
+                        <p>Comprehensive feature integration and multi-timeframe functionality</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>R1.0-R1.3</h4>
+                        <p>Core functionality, alerts, visual enhancements, and UI improvements</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

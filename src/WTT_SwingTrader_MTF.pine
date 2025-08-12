@@ -1,0 +1,333 @@
+//@version=5
+indicator("WTT Swing Trader MTF R1.6", shorttitle="WTT SwingTrader MTF R1.6", overlay=true)
+
+// ============================================================================
+// WTT SWING TRADER MTF - WaveRider Trading Technologies
+// ============================================================================
+// VERSION HISTORY
+// ============================================================================
+// R1.6 - Dynamic Boundary Line System (Current)
+// - Implemented dynamic boundary line system with historical reference points
+// - Added separate triggers for bullish and bearish boundary lines
+// - Lower boundary lines trigger on swing long entries or trend change bullish
+// - Upper boundary lines trigger on swing short entries or trend change bearish
+// - Lines originate from boundary levels 3 bars before current price
+// - Lines are perfectly horizontal and extend 20 bars ahead
+// - Lines continuously update to maintain 3-bar historical reference
+// - Lines delete when price trades through boundary levels
+// - Enhanced visual reference system for boundary evolution tracking
+//
+// R1.5 - Performance Analytics Enhancement
+// - Consolidated RSI, MACD, ATR, and Volume into single table row for cleaner display
+// - Updated indicator name to include version number for better identification
+// - Enhanced performance tracking based on Stop Loss (SL), Profit Target (PT), and Trailing Stop (TS)
+// - Added detailed exit breakdowns showing SL/PT/TS counts separately
+// - Improved success rate calculation using PT and TS exits as successful trades
+// - Expanded status table with active trade indicator and comprehensive metrics
+//
+// R1.4 - Comprehensive Feature Integration
+// - Final release with complete multi-timeframe swing trading functionality
+// - Integrated daily trend analysis with current timeframe signal generation
+// - Added comprehensive alert system with dynamic price and indicator information
+// - Implemented volume confirmation for enhanced signal validation
+// - Created trend cloud visualization with customizable transparency settings
+// - Enhanced dark-themed status table with real-time market information
+// - Optimized color scheme for better visual clarity and professional appearance
+//
+// R1.3 - Visual Enhancement and Alert System
+// - Added trend change alerts synchronized with visual trend indicators
+// - Implemented ATR-based exit signals with diamond-shaped markers
+// - Enhanced visual elements including trend cloud and signal markers
+// - Improved alert system with comprehensive market data integration
+// - Added trend transition detection for early market movement identification
+// - Optimized visual feedback for better user experience
+//
+// R1.2 - Alert System Enhancement
+// - Enhanced alert messages with detailed price points and currency information
+// - Added comprehensive market data to alert notifications
+// - Improved alert frequency management for better signal quality
+// - Integrated RSI and MACD values into alert messages for complete context
+// - Enhanced user notification system for better trade management
+//
+// R1.1 - Visual Design and User Interface
+// - Improved visual elements and implemented professional color scheme
+// - Enhanced user interface with better contrast and readability
+// - Optimized color coding: Orange (bullish), Purple (bearish), Gray (neutral)
+// - Improved table layout and information display
+// - Enhanced overall visual appeal and professional appearance
+//
+// R1.0 - Initial Release
+// - Multi-timeframe swing trading indicator combining Daily trend + Current timeframe signals
+// - Trend detection using EMA alignment (12, 26, 50 periods) for reliable market direction
+// - MACD and RSI momentum confirmation for enhanced signal validation
+// - Dynamic Support/Resistance levels with pivot point calculations
+// - Entry/Exit signals with comprehensive alert system
+// - Volume confirmation for signal validation and market strength assessment
+// - Conservative approach as default settings for reliable trading
+// - Foundation for WaveRider Trading Technologies swing trading methodology
+// ============================================================================
+
+// Hardcoded Parameters
+// ============================================================================
+// EMA Settings
+ema_fast = 12
+ema_slow = 26
+ema_trend = 50
+
+// MACD Settings
+macd_fast = 12
+macd_slow = 26
+macd_signal = 9
+
+// RSI Settings
+rsi_length = 14
+
+// Volume Settings
+volume_ma_length = 20
+
+// Display Settings
+show_signals = input.bool(true, "Show Entry/Exit Signals")
+show_trend = input.bool(true, "Show Trend Direction")
+show_emas = input.bool(false, "Show EMAs")
+
+// Colors
+bull_color = input.color(color.orange, "Bullish Color")
+bear_color = input.color(color.purple, "Bearish Color")
+neutral_color = input.color(color.gray, "Neutral Color")
+
+// ============================================================================
+// CALCULATIONS
+// ============================================================================
+
+// Multi-timeframe data
+[ema_fast_daily, ema_slow_daily, ema_trend_daily] = request.security(syminfo.tickerid, "D", [ta.ema(close, ema_fast), ta.ema(close, ema_slow), ta.ema(close, ema_trend)])
+[ema_fast_4h, ema_slow_4h, ema_trend_4h] = request.security(syminfo.tickerid, "240", [ta.ema(close, ema_fast), ta.ema(close, ema_slow), ta.ema(close, ema_trend)])
+[ema_fast_1h, ema_slow_1h, ema_trend_1h] = request.security(syminfo.tickerid, "60", [ta.ema(close, ema_fast), ta.ema(close, ema_slow), ta.ema(close, ema_trend)])
+
+// Current timeframe calculations
+ema_fast_curr = ta.ema(close, ema_fast)
+ema_slow_curr = ta.ema(close, ema_slow)
+ema_trend_curr = ta.ema(close, ema_trend)
+
+[macd_line_curr, macd_signal_curr, macd_hist_curr] = ta.macd(close, macd_fast, macd_slow, macd_signal)
+rsi_curr = ta.rsi(close, rsi_length)
+
+// ATR calculations for exit signals
+atr_curr = ta.atr(14)
+atr_high = ta.highest(atr_curr, 20)
+
+// Volume analysis
+volume_ma = ta.sma(volume, volume_ma_length)
+volume_high = volume > volume_ma * 1.5
+
+// ============================================================================
+// TREND ANALYSIS
+// ============================================================================
+
+// Primary trend (using higher timeframe)
+trend_bullish = ema_fast_daily > ema_slow_daily and ema_slow_daily > ema_trend_daily
+trend_bearish = ema_fast_daily < ema_slow_daily and ema_slow_daily < ema_trend_daily
+
+// 4hr trend analysis
+trend_bullish_4h = ema_fast_4h > ema_slow_4h and ema_slow_4h > ema_trend_4h
+trend_bearish_4h = ema_fast_4h < ema_slow_4h and ema_slow_4h < ema_trend_4h
+
+// 1hr trend analysis
+trend_bullish_1h = ema_fast_1h > ema_slow_1h and ema_slow_1h > ema_trend_1h
+trend_bearish_1h = ema_fast_1h < ema_slow_1h and ema_slow_1h < ema_trend_1h
+
+// Secondary trend (current timeframe)
+trend_bullish_curr = ema_fast_curr > ema_slow_curr and ema_slow_curr > ema_trend_curr
+trend_bearish_curr = ema_fast_curr < ema_slow_curr and ema_slow_curr < ema_trend_curr
+
+
+
+// ============================================================================
+// SIGNAL GENERATION
+// ============================================================================
+
+// Swing entry conditions (Multi-timeframe alignment required)
+long_condition = trend_bullish and trend_bullish_4h and trend_bullish_1h and trend_bullish_curr and macd_line_curr > macd_signal_curr and macd_hist_curr > macd_hist_curr[1] and rsi_curr > 40 and rsi_curr < 80 and volume_high and close > ema_fast_curr
+
+short_condition = trend_bearish and trend_bearish_4h and trend_bearish_1h and trend_bearish_curr and macd_line_curr < macd_signal_curr and macd_hist_curr < macd_hist_curr[1] and rsi_curr < 60 and rsi_curr > 20 and volume_high and close < ema_fast_curr
+
+
+
+// Trend transition conditions (synchronized with trend cloud)
+trend_bullish_transition = trend_bullish_curr and not trend_bullish_curr[1]
+trend_bearish_transition = trend_bearish_curr and not trend_bearish_curr[1]
+
+// ATR-based exit conditions
+atr_bullish_exit = atr_curr > atr_high * 0.8 and close > close[1] and close > close[2]  // High volatility with upward momentum
+atr_bearish_exit = atr_curr > atr_high * 0.8 and close < close[1] and close < close[2]  // High volatility with downward momentum
+
+
+
+// Trade tracking variables
+var float long_entry_price = na
+var float short_entry_price = na
+var bool in_long_trade = false
+var bool in_short_trade = false
+
+// Current timeframe trade tracking variables
+var float ctf_long_entry_price = na
+var float ctf_short_entry_price = na
+var bool in_ctf_long_trade = false
+var bool in_ctf_short_trade = false
+
+// ATR diamond tracking variables
+var bool atr_bearish_diamond_plotted = false
+var bool atr_bullish_diamond_plotted = false
+
+// Track trade entries and exits
+if long_condition and not in_long_trade
+    long_entry_price := close
+    in_long_trade := true
+    atr_bearish_diamond_plotted := false  // Reset diamond flag for new trade
+
+if short_condition and not in_short_trade
+    short_entry_price := close
+    in_short_trade := true
+
+// Current timeframe trade tracking
+// Entry conditions for current timeframe (simplified - just trend and MACD)
+ctf_long_condition = trend_bullish_curr and macd_line_curr > macd_signal_curr and macd_hist_curr > macd_hist_curr[1]
+ctf_short_condition = trend_bearish_curr and macd_line_curr < macd_signal_curr and macd_hist_curr < macd_hist_curr[1]
+
+// Track current timeframe trade entries and exits
+if ctf_long_condition and not in_ctf_long_trade
+    ctf_long_entry_price := close
+    in_ctf_long_trade := true
+
+if ctf_short_condition and not in_ctf_short_trade
+    ctf_short_entry_price := close
+    in_ctf_short_trade := true
+
+// ============================================================================
+// PLOTTING
+// ============================================================================
+
+// Plot EMAs
+plot(show_emas ? ema_fast_curr : na, "Fast EMA", color=color.blue, linewidth=1)
+plot(show_emas ? ema_slow_curr : na, "Slow EMA", color=color.orange, linewidth=1)
+plot(show_emas ? ema_trend_curr : na, "Trend EMA", color=color.purple, linewidth=4)
+
+
+
+// Plot signals
+plotshape(long_condition, "Long Signal", shape.triangleup, location.belowbar, bull_color, size=size.normal)
+plotshape(short_condition, "Short Signal", shape.triangledown, location.abovebar, bear_color, size=size.normal)
+
+// ATR-based exit signals (diamond indicators)
+// Only plot diamonds when volatility is high and momentum is strong
+plotshape(show_signals and atr_bearish_exit and trend_bullish_curr and not atr_bearish_diamond_plotted, "ATR Bearish Exit (Uptrend)", shape.diamond, location.abovebar, color.red, size=size.tiny)
+plotshape(show_signals and atr_bullish_exit and trend_bearish_curr and not atr_bullish_diamond_plotted, "ATR Bullish Exit (Downtrend)", shape.diamond, location.belowbar, color.green, size=size.tiny)
+
+// Set diamond flags when plotted
+if show_signals and atr_bearish_exit and trend_bullish_curr and not atr_bearish_diamond_plotted
+    atr_bearish_diamond_plotted := true
+
+if show_signals and atr_bullish_exit and trend_bearish_curr and not atr_bullish_diamond_plotted
+    atr_bullish_diamond_plotted := true
+
+// Trend change alert triangles (synchronized with trend cloud)
+plotshape(trend_bearish_transition, "Trend Change Bearish", shape.triangledown, location.abovebar, color.new(#8A2BE2, 0), size=size.small)
+plotshape(trend_bullish_transition, "Trend Change Bullish", shape.triangleup, location.belowbar, color.new(#FF4500, 0), size=size.small)
+
+// Trend cloud around price (using current timeframe trend)
+trend_upper = trend_bullish_curr ? high + (high * 0.002) : trend_bearish_curr ? high + (high * 0.002) : high + (high * 0.001)
+trend_lower = trend_bullish_curr ? low - (low * 0.002) : trend_bearish_curr ? low - (low * 0.002) : low - (low * 0.001)
+trend_color = trend_bullish_curr ? bull_color : trend_bearish_curr ? bear_color : neutral_color
+fill(plot(show_trend ? trend_upper : na, "Trend Upper", color.new(trend_color, 50), 2), plot(show_trend ? trend_lower : na, "Trend Lower", color.new(trend_color, 50), 2), color=color.new(trend_color, 65), title="Trend Cloud")
+
+// Horizontal line from lower boundary 3 bars ago
+var line lower_boundary_line = na
+lower_boundary_3_bars_ago = trend_lower[3]
+
+// Horizontal line from upper boundary 3 bars ago
+var line upper_boundary_line = na
+upper_boundary_3_bars_ago = trend_upper[3]
+
+// Create line when signal fires or update existing line
+if long_condition or trend_bullish_transition
+    line.delete(lower_boundary_line)
+    lower_boundary_line := line.new(bar_index - 3, trend_lower[3], bar_index + 20, trend_lower[3], color=color.red, width=2, style=line.style_dotted)
+    line.delete(upper_boundary_line)
+    upper_boundary_line := line.new(bar_index - 3, trend_upper[3], bar_index + 20, trend_upper[3], color=color.red, width=2, style=line.style_dotted)
+
+// Create upper boundary line for bearish signals
+if short_condition or trend_bearish_transition
+    line.delete(upper_boundary_line)
+    upper_boundary_line := line.new(bar_index - 3, trend_upper[3], bar_index + 20, trend_upper[3], color=color.red, width=2, style=line.style_dotted)
+
+// Update line to extend further on each bar and adjust to current boundary levels
+if not na(lower_boundary_line)
+    line.set_xy1(lower_boundary_line, bar_index - 3, trend_lower[3])
+    line.set_xy2(lower_boundary_line, bar_index + 20, trend_lower[3])
+    // Delete line when price trades through it
+    line_price = line.get_price(lower_boundary_line, bar_index)
+    if close <= line_price
+        line.delete(lower_boundary_line)
+        lower_boundary_line := na
+
+if not na(upper_boundary_line)
+    line.set_xy1(upper_boundary_line, bar_index - 3, trend_upper[3])
+    line.set_xy2(upper_boundary_line, bar_index + 20, trend_upper[3])
+    // Delete line when price trades through it
+    line_price = line.get_price(upper_boundary_line, bar_index)
+    if close >= line_price
+        line.delete(upper_boundary_line)
+        upper_boundary_line := na
+
+
+// ============================================================================
+// TABLE DISPLAY
+// ============================================================================
+
+if barstate.islast
+    var table info_table = table.new(position.top_right, 2, 5, bgcolor=color.new(color.black, 80), border_width=1, frame_color=color.gray)
+    
+    table.cell(info_table, 0, 0, "Swing Trading Status", text_color=color.white, bgcolor=color.new(color.gray, 40), text_size=size.small)
+    table.cell(info_table, 1, 0, "Value", text_color=color.white, bgcolor=color.new(color.gray, 40), text_size=size.small)
+    
+    table.cell(info_table, 0, 1, "Trend (Daily)", text_color=color.white, text_size=size.small)
+    trend_text = trend_bullish ? "BULLISH" : trend_bearish ? "BEARISH" : "NEUTRAL"
+    trend_color = trend_bullish ? bull_color : trend_bearish ? bear_color : neutral_color
+    table.cell(info_table, 1, 1, trend_text, text_color=color.white, bgcolor=trend_color, text_size=size.small)
+    
+    table.cell(info_table, 0, 2, "Indicators (CTF)", text_color=color.white, text_size=size.small)
+    macd_status = macd_line_curr > macd_signal_curr ? "BULL" : "BEAR"
+    atr_status = atr_curr > atr_high * 0.8 ? "HIGH" : "NORM"
+    vol_status = volume_high ? "HIGH" : "NORM"
+    indicators_text = "RSI:" + str.tostring(math.round(rsi_curr, 1)) + " MACD:" + macd_status + " ATR:" + atr_status + " VOL:" + vol_status
+    table.cell(info_table, 1, 2, indicators_text, text_color=color.white, text_size=size.small)
+    
+    table.cell(info_table, 0, 3, "Signal (Daily)", text_color=color.white, text_size=size.small)
+    signal_text = long_condition ? "LONG" : short_condition ? "SHORT" : "NONE"
+    signal_color = long_condition ? bull_color : short_condition ? bear_color : neutral_color
+    table.cell(info_table, 1, 3, signal_text, text_color=color.white, bgcolor=signal_color, text_size=size.small)
+    
+    table.cell(info_table, 0, 4, "Active Trade", text_color=color.white, text_size=size.small)
+    active_trade_text = in_long_trade or in_short_trade or in_ctf_long_trade or in_ctf_short_trade ? "YES" : "NO"
+    active_trade_color = in_long_trade or in_short_trade or in_ctf_long_trade or in_ctf_short_trade ? bull_color : neutral_color
+    table.cell(info_table, 1, 4, active_trade_text, text_color=color.white, bgcolor=active_trade_color, text_size=size.small)
+
+// ============================================================================
+// ALERTS
+// ============================================================================
+
+// Entry alerts
+if long_condition
+    alert("🟢 SWING LONG ENTRY\n" + syminfo.ticker + "\nPrice: " + str.tostring(close, "#.#####") + "\nRSI: " + str.tostring(math.round(rsi_curr, 1)) + "\nMACD: " + str.tostring(math.round(macd_line_curr, 4)), alert.freq_once_per_bar)
+
+if short_condition
+    alert("🔴 SWING SHORT ENTRY\n" + syminfo.ticker + "\nPrice: " + str.tostring(close, "#.#####") + "\nRSI: " + str.tostring(math.round(rsi_curr, 1)) + "\nMACD: " + str.tostring(math.round(macd_line_curr, 4)), alert.freq_once_per_bar)
+
+
+
+// Trend change alerts (synchronized with trend cloud)
+if trend_bullish_transition
+    alert("🟢 TREND CHANGE: BULLISH\n" + syminfo.ticker + "\nPrice: " + str.tostring(close, "#.#####") + "\nRSI: " + str.tostring(math.round(rsi_curr, 1)) + "\nMACD: " + str.tostring(math.round(macd_line_curr, 4)) + "\nMACD Signal: " + str.tostring(math.round(macd_signal_curr, 4)) + "\nMACD Hist: " + str.tostring(math.round(macd_hist_curr, 4)) + "\nTrend: " + (trend_bullish_curr ? "BULLISH" : "NEUTRAL"), alert.freq_once_per_bar)
+
+if trend_bearish_transition
+    alert("🔴 TREND CHANGE: BEARISH\n" + syminfo.ticker + "\nPrice: " + str.tostring(close, "#.#####") + "\nRSI: " + str.tostring(math.round(rsi_curr, 1)) + "\nMACD: " + str.tostring(math.round(macd_line_curr, 4)) + "\nMACD Signal: " + str.tostring(math.round(macd_signal_curr, 4)) + "\nMACD Hist: " + str.tostring(math.round(macd_hist_curr, 4)) + "\nTrend: " + (trend_bearish_curr ? "BEARISH" : "NEUTRAL"), alert.freq_once_per_bar)
