@@ -214,7 +214,7 @@ plotshape(short_condition, "Short Signal", shape.triangledown, location.abovebar
 
 // Trend change alert triangles (synchronized with trend cloud)
 plotshape(trend_bearish_transition, "Trend Change Bearish", shape.triangledown, location.abovebar, color.new(#8A2BE2, 0), size=size.small)
-plotshape(trend_bullish_transition, "Trend Change Bullish", shape.triangleup, location.belowbar, color.new(#FF4500, 0), size=size.small)
+plotshape(trend_bullish_transition, "Trend Change Bullish", shape.triangleup, location.belowbar, color.new(#FF8C00, 0), size=size.small)
 
 // Trend cloud around price (using current timeframe trend)
 trend_upper = trend_bullish_curr ? high + (high * 0.002) : trend_bearish_curr ? high + (high * 0.002) : high + (high * 0.001)

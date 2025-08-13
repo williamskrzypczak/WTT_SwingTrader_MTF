@@ -1,7 +1,7 @@
 # WTT SwingTrader MTF R1.8 - Quick Reference Guide
 
 ## WaveRider Trading Technologies
-### Multi-Timeframe Swing Trading Indicator
+### Multi-Timeframe Syzygy Trading Indicator
 
 ---
 
@@ -15,7 +15,7 @@
 ## 📊 **INDICATOR OVERVIEW**
 
 ### **Purpose**
-Multi-timeframe swing trading indicator that combines Daily trend analysis with current timeframe signal generation for reliable swing trading opportunities.
+Multi-timeframe Syzygy trading indicator that combines Daily trend analysis with current timeframe signal generation for reliable Syzygy trading opportunities.
 
 ### **Core Philosophy**
 - Conservative approach as default settings
@@ -146,8 +146,8 @@ MACD: [MACD_VALUE]
 - **Volume**: High/Normal volume status
 
 ### **Last Trade Type**
-- **SWING LONG**: Long entry signal
-- **SWING SHORT**: Short entry signal
+    - **Syzygy LONG**: Long entry signal
+    - **Syzygy SHORT**: Short entry signal
 - **TREND BULLISH**: Bullish trend change
 - **TREND BEARISH**: Bearish trend change
 - **NONE**: No recent activity
@@ -263,7 +263,7 @@ MACD: [MACD_VALUE]
 
 ### **R1.0**
 - Initial release
-- Multi-timeframe swing trading foundation
+- Multi-timeframe Syzygy trading foundation
 - WaveRider Trading Technologies methodology
 
 ---
