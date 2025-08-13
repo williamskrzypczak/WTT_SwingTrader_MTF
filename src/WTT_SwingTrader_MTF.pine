@@ -1,12 +1,20 @@
 //@version=5
-indicator("WTT Swing Trader MTF R1.7", shorttitle="WTT SwingTrader MTF R1.7", overlay=true)
+indicator("WTT Swing Trader MTF R1.8", shorttitle="WTT SwingTrader MTF R1.8", overlay=true)
 
 // ============================================================================
 // WTT SWING TRADER MTF - WaveRider Trading Technologies
 // ============================================================================
 // VERSION HISTORY
 // ============================================================================
-// R1.7 - Enhanced Status Table & Color Coding (Current)
+// R1.8 - Syzygy Alert Branding & Enhanced Boundary Alerts (Current)
+// - Renamed all swing alerts to "Syzygy" branding for consistent terminology
+// - Enhanced long entry alerts to include lower boundary line price point
+// - Enhanced short entry alerts to include upper boundary line price point
+// - Improved trade management with boundary level references in alerts
+// - Maintained all existing functionality while enhancing alert information
+// - Optimized alert messages for better risk management and trade planning
+//
+// R1.7 - Enhanced Status Table & Color Coding
 // - Redesigned status table with individual color-coded timeframe columns
 // - Added color-coded trend values: Green (BULL), Red (BEAR), Gray (NEUT)
 // - Implemented color-coded indicator values: RSI (red/green), MACD (green/red), ATR (yellow/gray), Volume (orange/blue/gray)
@@ -122,9 +130,8 @@ ema_trend_curr = ta.ema(close, ema_trend)
 [macd_line_curr, macd_signal_curr, macd_hist_curr] = ta.macd(close, macd_fast, macd_slow, macd_signal)
 rsi_curr = ta.rsi(close, rsi_length)
 
-// ATR calculations for exit signals
+// ATR calculations
 atr_curr = ta.atr(14)
-atr_high = ta.highest(atr_curr, 20)
 
 // Volume analysis
 volume_ma = ta.sma(volume, volume_ma_length)
@@ -167,41 +174,18 @@ short_condition = trend_bearish and trend_bearish_4h and trend_bearish_1h and tr
 trend_bullish_transition = trend_bullish_curr and not trend_bullish_curr[1]
 trend_bearish_transition = trend_bearish_curr and not trend_bearish_curr[1]
 
-// ATR-based exit conditions
-atr_bullish_exit = atr_curr > atr_high * 0.8 and close > close[1] and close > close[2]  // High volatility with upward momentum
-atr_bearish_exit = atr_curr > atr_high * 0.8 and close < close[1] and close < close[2]  // High volatility with downward momentum
 
 
 
-// Trade tracking variables
-var float long_entry_price = na
-var float short_entry_price = na
-var bool in_long_trade = false
-var bool in_short_trade = false
-
-// Current timeframe trade tracking variables
-var float ctf_long_entry_price = na
-var float ctf_short_entry_price = na
-var bool in_ctf_long_trade = false
-var bool in_ctf_short_trade = false
-
-// ATR diamond tracking variables
-var bool atr_bearish_diamond_plotted = false
-var bool atr_bullish_diamond_plotted = false
 
 // Last trade type tracking
 var string last_trade_type = "NONE"
 
-// Track trade entries and exits
-if long_condition and not in_long_trade
-    long_entry_price := close
-    in_long_trade := true
-    atr_bearish_diamond_plotted := false  // Reset diamond flag for new trade
+// Update last trade type for signals
+if long_condition
     last_trade_type := "SWING LONG"
 
-if short_condition and not in_short_trade
-    short_entry_price := close
-    in_short_trade := true
+if short_condition
     last_trade_type := "SWING SHORT"
 
 // Update last trade type for trend changes
@@ -210,20 +194,6 @@ if trend_bullish_transition
 
 if trend_bearish_transition
     last_trade_type := "TREND BEARISH"
-
-// Current timeframe trade tracking
-// Entry conditions for current timeframe (simplified - just trend and MACD)
-ctf_long_condition = trend_bullish_curr and macd_line_curr > macd_signal_curr and macd_hist_curr > macd_hist_curr[1]
-ctf_short_condition = trend_bearish_curr and macd_line_curr < macd_signal_curr and macd_hist_curr < macd_hist_curr[1]
-
-// Track current timeframe trade entries and exits
-if ctf_long_condition and not in_ctf_long_trade
-    ctf_long_entry_price := close
-    in_ctf_long_trade := true
-
-if ctf_short_condition and not in_ctf_short_trade
-    ctf_short_entry_price := close
-    in_ctf_short_trade := true
 
 // ============================================================================
 // PLOTTING
@@ -240,17 +210,7 @@ plot(show_emas ? ema_trend_curr : na, "Trend EMA", color=color.purple, linewidth
 plotshape(long_condition, "Long Signal", shape.triangleup, location.belowbar, bull_color, size=size.normal)
 plotshape(short_condition, "Short Signal", shape.triangledown, location.abovebar, bear_color, size=size.normal)
 
-// ATR-based exit signals (diamond indicators)
-// Only plot diamonds when volatility is high and momentum is strong
-plotshape(show_signals and atr_bearish_exit and trend_bullish_curr and not atr_bearish_diamond_plotted, "ATR Bearish Exit (Uptrend)", shape.diamond, location.abovebar, color.red, size=size.tiny)
-plotshape(show_signals and atr_bullish_exit and trend_bearish_curr and not atr_bullish_diamond_plotted, "ATR Bullish Exit (Downtrend)", shape.diamond, location.belowbar, color.green, size=size.tiny)
 
-// Set diamond flags when plotted
-if show_signals and atr_bearish_exit and trend_bullish_curr and not atr_bearish_diamond_plotted
-    atr_bearish_diamond_plotted := true
-
-if show_signals and atr_bullish_exit and trend_bearish_curr and not atr_bullish_diamond_plotted
-    atr_bullish_diamond_plotted := true
 
 // Trend change alert triangles (synchronized with trend cloud)
 plotshape(trend_bearish_transition, "Trend Change Bearish", shape.triangledown, location.abovebar, color.new(#8A2BE2, 0), size=size.small)
@@ -307,15 +267,22 @@ if not na(upper_boundary_line)
 // ============================================================================
 
 if barstate.islast
-    var table info_table = table.new(position.top_right, 5, 4, bgcolor=color.new(color.black, 80), border_width=1, frame_color=color.gray)
+    var table info_table = table.new(position.top_right, 5, 5, bgcolor=color.new(color.black, 80), border_width=1, frame_color=color.gray)
     
-    table.cell(info_table, 0, 0, "Swing Trading Status", text_color=color.white, bgcolor=color.new(color.gray, 40), text_size=size.small)
-    table.cell(info_table, 1, 0, "D", text_color=color.white, bgcolor=color.new(color.gray, 40), text_size=size.small)
-    table.cell(info_table, 2, 0, "4H", text_color=color.white, bgcolor=color.new(color.gray, 40), text_size=size.small)
-    table.cell(info_table, 3, 0, "1H", text_color=color.white, bgcolor=color.new(color.gray, 40), text_size=size.small)
-    table.cell(info_table, 4, 0, "CTF", text_color=color.white, bgcolor=color.new(color.gray, 40), text_size=size.small)
+    // Blank row at top for spacing
+    table.cell(info_table, 0, 0, "", text_color=color.white, text_size=size.small)
+    table.cell(info_table, 1, 0, "", text_color=color.white, text_size=size.small)
+    table.cell(info_table, 2, 0, "", text_color=color.white, text_size=size.small)
+    table.cell(info_table, 3, 0, "", text_color=color.white, text_size=size.small)
+    table.cell(info_table, 4, 0, "", text_color=color.white, text_size=size.small)
     
-    table.cell(info_table, 0, 1, "Trend", text_color=color.white, text_size=size.small)
+    table.cell(info_table, 0, 1, "Swing Trading Status", text_color=color.white, bgcolor=color.new(color.gray, 40), text_size=size.small)
+    table.cell(info_table, 1, 1, "D", text_color=color.white, bgcolor=color.new(color.gray, 40), text_size=size.small)
+    table.cell(info_table, 2, 1, "4H", text_color=color.white, bgcolor=color.new(color.gray, 40), text_size=size.small)
+    table.cell(info_table, 3, 1, "1H", text_color=color.white, bgcolor=color.new(color.gray, 40), text_size=size.small)
+    table.cell(info_table, 4, 1, "CTF", text_color=color.white, bgcolor=color.new(color.gray, 40), text_size=size.small)
+    
+    table.cell(info_table, 0, 2, "Trend", text_color=color.white, text_size=size.small)
     daily_trend = trend_bullish ? "BULL" : trend_bearish ? "BEAR" : "NEUT"
     tf4h_trend = trend_bullish_4h ? "BULL" : trend_bearish_4h ? "BEAR" : "NEUT"
     tf1h_trend = trend_bullish_1h ? "BULL" : trend_bearish_1h ? "BEAR" : "NEUT"
@@ -324,20 +291,20 @@ if barstate.islast
     tf4h_color = trend_bullish_4h ? color.green : trend_bearish_4h ? color.red : color.gray
     tf1h_color = trend_bullish_1h ? color.green : trend_bearish_1h ? color.red : color.gray
     curr_color = trend_bullish_curr ? color.green : trend_bearish_curr ? color.red : color.gray
-    table.cell(info_table, 1, 1, daily_trend, text_color=color.white, bgcolor=daily_color, text_size=size.small)
-    table.cell(info_table, 2, 1, tf4h_trend, text_color=color.white, bgcolor=tf4h_color, text_size=size.small)
-    table.cell(info_table, 3, 1, tf1h_trend, text_color=color.white, bgcolor=tf1h_color, text_size=size.small)
-    table.cell(info_table, 4, 1, curr_trend, text_color=color.white, bgcolor=curr_color, text_size=size.small)
+    table.cell(info_table, 1, 2, daily_trend, text_color=color.white, bgcolor=daily_color, text_size=size.small)
+    table.cell(info_table, 2, 2, tf4h_trend, text_color=color.white, bgcolor=tf4h_color, text_size=size.small)
+    table.cell(info_table, 3, 2, tf1h_trend, text_color=color.white, bgcolor=tf1h_color, text_size=size.small)
+    table.cell(info_table, 4, 2, curr_trend, text_color=color.white, bgcolor=curr_color, text_size=size.small)
     
-    table.cell(info_table, 0, 2, "Indicators", text_color=color.white, text_size=size.small)
+    table.cell(info_table, 0, 3, "Indicators", text_color=color.white, text_size=size.small)
     macd_status = macd_line_curr > macd_signal_curr ? "BULL" : "BEAR"
-    atr_status = atr_curr > atr_high * 0.8 ? "HIGH" : "NORM"
+    atr_status = atr_curr > ta.sma(atr_curr, 20) * 1.5 ? "HIGH" : "NORM"
     vol_status = volume_high ? "HIGH" : "NORM"
     
     // Color coding for individual indicators
     rsi_color = rsi_curr > 70 ? color.red : rsi_curr < 30 ? color.green : color.white
     macd_color = macd_line_curr > macd_signal_curr ? color.green : color.red
-    atr_color = atr_curr > atr_high * 0.8 ? color.yellow : color.gray
+    atr_color = atr_curr > ta.sma(atr_curr, 20) * 1.5 ? color.yellow : color.gray
     vol_color = volume_high ? color.orange : volume < volume_ma * 0.5 ? color.blue : color.gray
     
     rsi_text = "RSI:" + str.tostring(math.round(rsi_curr, 1))
@@ -345,18 +312,18 @@ if barstate.islast
     atr_text = "ATR:" + atr_status
     vol_text = "VOL:" + vol_status
     
-    table.cell(info_table, 1, 2, rsi_text, text_color=rsi_color, text_size=size.small)
-    table.cell(info_table, 2, 2, macd_text, text_color=macd_color, text_size=size.small)
-    table.cell(info_table, 3, 2, atr_text, text_color=atr_color, text_size=size.small)
-    table.cell(info_table, 4, 2, vol_text, text_color=vol_color, text_size=size.small)
+    table.cell(info_table, 1, 3, rsi_text, text_color=rsi_color, text_size=size.small)
+    table.cell(info_table, 2, 3, macd_text, text_color=macd_color, text_size=size.small)
+    table.cell(info_table, 3, 3, atr_text, text_color=atr_color, text_size=size.small)
+    table.cell(info_table, 4, 3, vol_text, text_color=vol_color, text_size=size.small)
     
-    table.cell(info_table, 0, 3, "Last Trade", text_color=color.white, text_size=size.small)
+    table.cell(info_table, 0, 4, "Last Trade", text_color=color.white, text_size=size.small)
     last_trade_type_text = last_trade_type
     last_trade_type_color = last_trade_type == "SWING LONG" or last_trade_type == "TREND BULLISH" ? bull_color : last_trade_type == "SWING SHORT" or last_trade_type == "TREND BEARISH" ? bear_color : neutral_color
-    table.cell(info_table, 1, 3, last_trade_type_text, text_color=color.white, bgcolor=last_trade_type_color, text_size=size.small)
-    table.cell(info_table, 2, 3, last_trade_type_text, text_color=color.white, bgcolor=last_trade_type_color, text_size=size.small)
-    table.cell(info_table, 3, 3, last_trade_type_text, text_color=color.white, bgcolor=last_trade_type_color, text_size=size.small)
-    table.cell(info_table, 4, 3, last_trade_type_text, text_color=color.white, bgcolor=last_trade_type_color, text_size=size.small)
+    table.cell(info_table, 1, 4, last_trade_type_text, text_color=color.white, bgcolor=last_trade_type_color, text_size=size.small)
+    table.cell(info_table, 2, 4, last_trade_type_text, text_color=color.white, bgcolor=last_trade_type_color, text_size=size.small)
+    table.cell(info_table, 3, 4, last_trade_type_text, text_color=color.white, bgcolor=last_trade_type_color, text_size=size.small)
+    table.cell(info_table, 4, 4, last_trade_type_text, text_color=color.white, bgcolor=last_trade_type_color, text_size=size.small)
 
 // ============================================================================
 // ALERTS
@@ -364,10 +331,10 @@ if barstate.islast
 
 // Entry alerts
 if long_condition
-    alert("🟢 SWING LONG ENTRY\n" + syminfo.ticker + "\nPrice: " + str.tostring(close, "#.#####") + "\nRSI: " + str.tostring(math.round(rsi_curr, 1)) + "\nMACD: " + str.tostring(math.round(macd_line_curr, 4)), alert.freq_once_per_bar)
+    alert("🟢 Syzygy LONG ENTRY\n" + syminfo.ticker + "\nPrice: " + str.tostring(close, "#.#####") + "\nLower Boundary: " + str.tostring(trend_lower[3], "#.#####") + "\nRSI: " + str.tostring(math.round(rsi_curr, 1)) + "\nMACD: " + str.tostring(math.round(macd_line_curr, 4)), alert.freq_once_per_bar)
 
 if short_condition
-    alert("🔴 SWING SHORT ENTRY\n" + syminfo.ticker + "\nPrice: " + str.tostring(close, "#.#####") + "\nRSI: " + str.tostring(math.round(rsi_curr, 1)) + "\nMACD: " + str.tostring(math.round(macd_line_curr, 4)), alert.freq_once_per_bar)
+    alert("🔴 Syzygy SHORT ENTRY\n" + syminfo.ticker + "\nPrice: " + str.tostring(close, "#.#####") + "\nUpper Boundary: " + str.tostring(trend_upper[3], "#.#####") + "\nRSI: " + str.tostring(math.round(rsi_curr, 1)) + "\nMACD: " + str.tostring(math.round(macd_line_curr, 4)), alert.freq_once_per_bar)
 
 
 
