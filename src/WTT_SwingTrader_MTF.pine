@@ -1,18 +1,19 @@
 //@version=5
-indicator("WTT Swing Trader MTF R1.8", shorttitle="WTT SwingTrader MTF R1.8", overlay=true)
+indicator("WTT Swing Trader MTF R1.9", shorttitle="WTT SwingTrader MTF R1.9", overlay=true)
 
 // ============================================================================
 // WTT SWING TRADER MTF - WaveRider Trading Technologies
 // ============================================================================
 // VERSION HISTORY
 // ============================================================================
-// R1.8 - Syzygy Alert Branding & Enhanced Boundary Alerts (Current)
-// - Renamed all swing alerts to "Syzygy" branding for consistent terminology
-// - Enhanced long entry alerts to include lower boundary line price point
-// - Enhanced short entry alerts to include upper boundary line price point
-// - Improved trade management with boundary level references in alerts
-// - Maintained all existing functionality while enhancing alert information
-// - Optimized alert messages for better risk management and trade planning
+// R1.9 - Multi-Timeframe Alert System & Enhanced Signal Hierarchy (Current)
+// - Implemented comprehensive multi-timeframe alert system with three signal types
+// - Added D+4H+1H+CTF alerts for highest confidence swing trades
+// - Added 4H+1H+CTF alerts for medium-term trades with high confidence
+// - Added 1H+CTF alerts for short-term trades with medium confidence
+// - Enhanced alert descriptions to clearly show timeframe alignments
+// - Simplified alert messages for reliable delivery and quick action
+// - Optimized signal hierarchy for different trading timeframes and risk levels
 //
 // R1.7 - Enhanced Status Table & Color Coding
 // - Redesigned status table with individual color-coded timeframe columns
@@ -206,9 +207,17 @@ plot(show_emas ? ema_trend_curr : na, "Trend EMA", color=color.purple, linewidth
 
 
 
-// Plot signals
-plotshape(long_condition, "Long Signal", shape.triangleup, location.belowbar, bull_color, size=size.normal)
-plotshape(short_condition, "Short Signal", shape.triangledown, location.abovebar, bear_color, size=size.normal)
+// Plot signals with color coding
+plotshape(long_condition, "D+4H+1H+CTF Long Signal", shape.triangleup, location.belowbar, color.green, size=size.normal)
+plotshape(short_condition, "D+4H+1H+CTF Short Signal", shape.triangledown, location.abovebar, color.red, size=size.normal)
+
+// Plot 4H+1H+CTF signals
+plotshape(trend_bullish_4h and trend_bullish_1h and trend_bullish_curr and macd_line_curr > macd_signal_curr and rsi_curr > 40 and rsi_curr < 80 and volume_high, "4H+1H+CTF Long Signal", shape.triangleup, location.belowbar, color.blue, size=size.normal)
+plotshape(trend_bearish_4h and trend_bearish_1h and trend_bearish_curr and macd_line_curr < macd_signal_curr and rsi_curr < 60 and rsi_curr > 20 and volume_high, "4H+1H+CTF Short Signal", shape.triangledown, location.abovebar, color.purple, size=size.normal)
+
+// Plot 1H+CTF signals
+plotshape(trend_bullish_1h and trend_bullish_curr and macd_line_curr > macd_signal_curr and rsi_curr > 40 and rsi_curr < 80 and volume_high, "1H+CTF Long Signal", shape.triangleup, location.belowbar, color.orange, size=size.normal)
+plotshape(trend_bearish_1h and trend_bearish_curr and macd_line_curr < macd_signal_curr and rsi_curr < 60 and rsi_curr > 20 and volume_high, "1H+CTF Short Signal", shape.triangledown, location.abovebar, color.yellow, size=size.normal)
 
 
 
@@ -331,16 +340,30 @@ if barstate.islast
 
 // Entry alerts
 if long_condition
-    alert("🟢 Syzygy LONG ENTRY\n" + syminfo.ticker + "\nPrice: " + str.tostring(close, "#.#####") + "\nLower Boundary: " + str.tostring(trend_lower[3], "#.#####") + "\nRSI: " + str.tostring(math.round(rsi_curr, 1)) + "\nMACD: " + str.tostring(math.round(macd_line_curr, 4)), alert.freq_once_per_bar)
+    alert("🟢 Syzygy D+4H+1H+CTF LONG\n" + syminfo.ticker + "\nPrice: " + str.tostring(close, "#.#####"), alert.freq_once_per_bar)
 
 if short_condition
-    alert("🔴 Syzygy SHORT ENTRY\n" + syminfo.ticker + "\nPrice: " + str.tostring(close, "#.#####") + "\nUpper Boundary: " + str.tostring(trend_upper[3], "#.#####") + "\nRSI: " + str.tostring(math.round(rsi_curr, 1)) + "\nMACD: " + str.tostring(math.round(macd_line_curr, 4)), alert.freq_once_per_bar)
+    alert("🔴 Syzygy D+4H+1H+CTF SHORT\n" + syminfo.ticker + "\nPrice: " + str.tostring(close, "#.#####"), alert.freq_once_per_bar)
+
+// CTF and 1H alignment alerts
+if trend_bullish_1h and trend_bullish_curr and macd_line_curr > macd_signal_curr and rsi_curr > 40 and rsi_curr < 80 and volume_high
+    alert("🟢 Syzygy 1H+CTF LONG\n" + syminfo.ticker + "\nPrice: " + str.tostring(close, "#.#####"), alert.freq_once_per_bar)
+
+if trend_bearish_1h and trend_bearish_curr and macd_line_curr < macd_signal_curr and rsi_curr < 60 and rsi_curr > 20 and volume_high
+    alert("🔴 Syzygy 1H+CTF SHORT\n" + syminfo.ticker + "\nPrice: " + str.tostring(close, "#.#####"), alert.freq_once_per_bar)
+
+// CTF, 1H, and 4H alignment alerts
+if trend_bullish_4h and trend_bullish_1h and trend_bullish_curr and macd_line_curr > macd_signal_curr and rsi_curr > 40 and rsi_curr < 80 and volume_high
+    alert("🟢 Syzygy 4H+1H+CTF LONG\n" + syminfo.ticker + "\nPrice: " + str.tostring(close, "#.#####"), alert.freq_once_per_bar)
+
+if trend_bearish_4h and trend_bearish_1h and trend_bearish_curr and macd_line_curr < macd_signal_curr and rsi_curr < 60 and rsi_curr > 20 and volume_high
+    alert("🔴 Syzygy 4H+1H+CTF SHORT\n" + syminfo.ticker + "\nPrice: " + str.tostring(close, "#.#####"), alert.freq_once_per_bar)
 
 
 
 // Trend change alerts (synchronized with trend cloud)
 if trend_bullish_transition
-    alert("🟢 TREND CHANGE: BULLISH\n" + syminfo.ticker + "\nPrice: " + str.tostring(close, "#.#####") + "\nRSI: " + str.tostring(math.round(rsi_curr, 1)) + "\nMACD: " + str.tostring(math.round(macd_line_curr, 4)) + "\nMACD Signal: " + str.tostring(math.round(macd_signal_curr, 4)) + "\nMACD Hist: " + str.tostring(math.round(macd_hist_curr, 4)) + "\nTrend: " + (trend_bullish_curr ? "BULLISH" : "NEUTRAL"), alert.freq_once_per_bar)
+    alert("🟢 TREND CHANGE: BULLISH\n" + syminfo.ticker + "\nPrice: " + str.tostring(close, "#.#####"), alert.freq_once_per_bar)
 
 if trend_bearish_transition
-    alert("🔴 TREND CHANGE: BEARISH\n" + syminfo.ticker + "\nPrice: " + str.tostring(close, "#.#####") + "\nRSI: " + str.tostring(math.round(rsi_curr, 1)) + "\nMACD: " + str.tostring(math.round(macd_line_curr, 4)) + "\nMACD Signal: " + str.tostring(math.round(macd_signal_curr, 4)) + "\nMACD Hist: " + str.tostring(math.round(macd_hist_curr, 4)) + "\nTrend: " + (trend_bearish_curr ? "BEARISH" : "NEUTRAL"), alert.freq_once_per_bar)
+    alert("🔴 TREND CHANGE: BEARISH\n" + syminfo.ticker + "\nPrice: " + str.tostring(close, "#.#####"), alert.freq_once_per_bar)

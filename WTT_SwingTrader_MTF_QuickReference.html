@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WTT Swing Trader MTF R1.8 - Quick Reference Guide</title>
+    <title>WTT Swing Trader MTF R1.9 - Quick Reference Guide</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -171,7 +171,7 @@
 <body>
     <div class="container">
         <div class="header">
-                    <h1>WTT Swing Trader MTF R1.8</h1>
+                    <h1>WTT Swing Trader MTF R1.9</h1>
         <p>WaveRider Trading Technologies - Multi-Timeframe Syzygy Trading Indicator</p>
             <p>Quick Reference Guide</p>
         </div>
@@ -222,16 +222,40 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td class="bullish">Syzygy Long Entry</td>
+                            <td class="bullish">D+4H+1H+CTF Long</td>
                             <td>All timeframes bullish + MACD > Signal + RSI 40-80 + Volume high + Close > Fast EMA</td>
-                            <td>Large Orange Triangle (Up)</td>
-                            <td>🟢 Syzygy LONG ENTRY</td>
+                            <td>Large Green Triangle (Up)</td>
+                            <td>🟢 Syzygy D+4H+1H+CTF LONG</td>
                         </tr>
                         <tr>
-                            <td class="bearish">Syzygy Short Entry</td>
+                            <td class="bearish">D+4H+1H+CTF Short</td>
                             <td>All timeframes bearish + MACD < Signal + RSI 20-60 + Volume high + Close < Fast EMA</td>
+                            <td>Large Red Triangle (Down)</td>
+                            <td>🔴 Syzygy D+4H+1H+CTF SHORT</td>
+                        </tr>
+                        <tr>
+                            <td class="bullish">4H+1H+CTF Long</td>
+                            <td>4H+1H+CTF bullish + MACD > Signal + RSI 40-80 + Volume high</td>
+                            <td>Large Blue Triangle (Up)</td>
+                            <td>🟢 Syzygy 4H+1H+CTF LONG</td>
+                        </tr>
+                        <tr>
+                            <td class="bearish">4H+1H+CTF Short</td>
+                            <td>4H+1H+CTF bearish + MACD < Signal + RSI 20-60 + Volume high</td>
                             <td>Large Purple Triangle (Down)</td>
-                            <td>🔴 Syzygy SHORT ENTRY</td>
+                            <td>🔴 Syzygy 4H+1H+CTF SHORT</td>
+                        </tr>
+                        <tr>
+                            <td class="bullish">1H+CTF Long</td>
+                            <td>1H+CTF bullish + MACD > Signal + RSI 40-80 + Volume high</td>
+                            <td>Large Orange Triangle (Up)</td>
+                            <td>🟢 Syzygy 1H+CTF LONG</td>
+                        </tr>
+                        <tr>
+                            <td class="bearish">1H+CTF Short</td>
+                            <td>1H+CTF bearish + MACD < Signal + RSI 20-60 + Volume high</td>
+                            <td>Large Yellow Triangle (Down)</td>
+                            <td>🔴 Syzygy 1H+CTF SHORT</td>
                         </tr>
                         <tr>
                             <td class="bullish">Trend Change Bullish</td>
@@ -272,7 +296,7 @@
                             <td class="orange-bg">VOL:HIGH</td>
                         </tr>
                         <tr>
-                            <td class="green-bg" colspan="4">Syzygy LONG</td>
+                            <td class="green-bg" colspan="4">D+4H+1H+CTF LONG</td>
                         </tr>
                     </table>
                 </div>

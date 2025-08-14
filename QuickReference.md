@@ -1,14 +1,15 @@
-# WTT SwingTrader MTF R1.8 - Quick Reference Guide
+# WTT SwingTrader MTF R1.9 - Quick Reference Guide
 
 ## WaveRider Trading Technologies
 ### Multi-Timeframe Syzygy Trading Indicator
 
 ---
 
-## 🚀 **R1.8 NEW FEATURES**
-- **Syzygy Alert Branding**: All swing alerts now use "Syzygy" terminology
-- **Enhanced Boundary Alerts**: Long entries include lower boundary price, short entries include upper boundary price
-- **Improved Trade Management**: Boundary level references for better risk management
+## 🚀 **R1.9 NEW FEATURES**
+- **Multi-Timeframe Alert System**: Three distinct signal types with different confidence levels
+- **Color-Coded Signal Triangles**: Visual distinction between signal types for instant recognition
+- **Enhanced Alert Descriptions**: Clear timeframe alignment indicators in alert messages
+- **Signal Hierarchy**: D+4H+1H+CTF (highest), 4H+1H+CTF (high), 1H+CTF (medium) confidence levels
 
 ---
 
@@ -80,32 +81,48 @@ Multi-timeframe Syzygy trading indicator that combines Daily trend analysis with
 
 ---
 
-## 🔔 **ALERT SYSTEM**
+## 🔔 **MULTI-TIMEFRAME ALERT SYSTEM**
 
-### **Syzygy Long Entry Alert**
+### **🟢 D+4H+1H+CTF Alerts (Highest Confidence)**
 ```
-🟢 Syzygy LONG ENTRY
+🟢 Syzygy D+4H+1H+CTF LONG
 [SYMBOL]
 Price: [CURRENT_PRICE]
-Lower Boundary: [LOWER_BOUNDARY_PRICE]
-RSI: [RSI_VALUE]
-MACD: [MACD_VALUE]
 ```
+- **Timeframes**: Daily + 4H + 1H + Current Timeframe
+- **Visual**: Green triangle (long) / Red triangle (short)
+- **Use for**: Major swing trades with highest confidence
 
-### **Syzygy Short Entry Alert**
+### **🔵 4H+1H+CTF Alerts (High Confidence)**
 ```
-🔴 Syzygy SHORT ENTRY
+🔵 Syzygy 4H+1H+CTF LONG
 [SYMBOL]
 Price: [CURRENT_PRICE]
-Upper Boundary: [UPPER_BOUNDARY_PRICE]
-RSI: [RSI_VALUE]
-MACD: [MACD_VALUE]
 ```
+- **Timeframes**: 4H + 1H + Current Timeframe
+- **Visual**: Blue triangle (long) / Purple triangle (short)
+- **Use for**: Medium-term trades with high confidence
+
+### **🟠 1H+CTF Alerts (Medium Confidence)**
+```
+🟠 Syzygy 1H+CTF LONG
+[SYMBOL]
+Price: [CURRENT_PRICE]
+```
+- **Timeframes**: 1H + Current Timeframe
+- **Visual**: Orange triangle (long) / Yellow triangle (short)
+- **Use for**: Short-term trades with medium confidence
 
 ### **Trend Change Alerts**
-- **Bullish Transition**: When current timeframe trend changes to bullish
-- **Bearish Transition**: When current timeframe trend changes to bearish
-- Includes comprehensive market data (price, RSI, MACD, signal, histogram, trend status)
+```
+🟢 TREND CHANGE: BULLISH
+[SYMBOL]
+Price: [CURRENT_PRICE]
+```
+- **Purpose**: Current timeframe trend transitions
+- **Use for**: Early trend change detection
+
+
 
 ---
 
@@ -221,7 +238,13 @@ MACD: [MACD_VALUE]
 
 ## 📝 **VERSION HISTORY**
 
-### **R1.8** (Current)
+### **R1.9** (Current)
+- Multi-timeframe alert system implementation
+- Color-coded signal triangles for visual recognition
+- Enhanced alert descriptions with timeframe alignments
+- Signal hierarchy for different confidence levels
+
+### **R1.8**
 - Syzygy alert branding implementation
 - Enhanced boundary price alerts
 - Improved trade management features
