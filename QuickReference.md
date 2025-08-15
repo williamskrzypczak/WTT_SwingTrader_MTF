@@ -1,4 +1,4 @@
-# WTT SwingTrader MTF R1.11 - Quick Reference
+# WTT SwingTrader MTF R1.12 - Quick Reference
 
 ## Multi-Timeframe Syzygy Trading Indicator
 
@@ -7,10 +7,18 @@ The WTT SwingTrader MTF identifies Syzygy trading opportunities across multiple 
 ### Last Trade Type
 - **D+4H+1H+CTF LONG** (Green background) - All 4 timeframes bullish
 - **D+4H+1H+CTF SHORT** (Red background) - All 4 timeframes bearish
-- **4H+1H+CTF LONG** (Blue background) - 4H, 1H, and CTF bullish
-- **4H+1H+CTF SHORT** (Purple background) - 4H, 1H, and CTF bearish
+- **4H+1H+CTF LONG** (Yellow background) - 4H, 1H, and CTF bullish
+- **4H+1H+CTF SHORT** (Yellow background) - 4H, 1H, and CTF bearish
 - **1H+CTF LONG** (Orange background) - 1H and CTF bullish
-- **1H+CTF SHORT** (Yellow background) - 1H and CTF bearish
+- **1H+CTF SHORT** (Orange background) - 1H and CTF bearish
+
+### R1.12 Features
+- **Triangle Color Scheme Optimization**: Streamlined color scheme for improved visual clarity
+- **Medium Confidence Triangles**: Yellow for both 4H+1H+CTF long and short signals
+- **Low Confidence Triangles**: Orange for both 1H+CTF long and short signals
+- **Trend Change Triangles**: Gray for neutral trend direction indication
+- **Enhanced Visual Hierarchy**: Consistent color coding across signal types
+- **Improved Signal Recognition**: Better differentiation between confidence levels
 
 ### R1.11 Features
 - **Trend Cloud Opacity Optimization**: Enhanced transparency settings for improved chart visibility
@@ -109,9 +117,10 @@ The WTT SwingTrader MTF identifies Syzygy trading opportunities across multiple 
 ## Visual Elements
 
 ### Signal Markers
-- **Large Triangles**: D+4H+1H+CTF signals (highest confidence)
-- **Normal Triangles**: 4H+1H+CTF signals (medium confidence)
-- **Small Triangles**: 1H+CTF signals (lower confidence)
+- **Large Triangles**: D+4H+1H+CTF signals (highest confidence) - Green/Red
+- **Normal Triangles**: 4H+1H+CTF signals (medium confidence) - Yellow
+- **Small Triangles**: 1H+CTF signals (lower confidence) - Orange
+- **Trend Change Triangles**: Trend direction changes - Gray
 
 ### Status Table
 - **Color-Coded Rows**: Match triangle colors for perfect synchronization
