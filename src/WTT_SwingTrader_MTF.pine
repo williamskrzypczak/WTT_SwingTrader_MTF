@@ -1,12 +1,20 @@
 //@version=5
-indicator("WTT Swing Trader MTF R1.10", shorttitle="WTT SwingTrader MTF R1.10", overlay=true)
+indicator("WTT Swing Trader MTF R1.11", shorttitle="WTT SwingTrader MTF R1.11", overlay=true)
 
 // ============================================================================
 // WTT SWING TRADER MTF - WaveRider Trading Technologies
 // ============================================================================
 // VERSION HISTORY
 // ============================================================================
-// R1.10 - Perfect Triangle-Table-Alert Synchronization & Progressive Sizing (Current)
+// R1.11 - Trend Cloud Opacity Optimization (Current)
+// - Optimized trend cloud transparency for improved chart visibility
+// - Adjusted fill area opacity to 75% for better visual balance
+// - Maintained boundary line opacity at 50% for clear contrast
+// - Enhanced visual hierarchy while preserving trend cloud functionality
+// - Improved chart readability without compromising trend indication
+// - Fine-tuned opacity settings for optimal user experience
+//
+// R1.10 - Perfect Triangle-Table-Alert Synchronization & Progressive Sizing
 // - Implemented perfect synchronization between triangle colors and status table row colors
 // - Added progressive triangle sizing based on timeframe alignment confidence
 // - Large triangles for D+4H+1H+CTF signals (highest confidence - 4 timeframes)
@@ -250,7 +258,7 @@ plotshape(trend_bullish_transition, "Trend Change Bullish", shape.triangleup, lo
 trend_upper = trend_bullish_curr ? high + (high * 0.002) : trend_bearish_curr ? high + (high * 0.002) : high + (high * 0.001)
 trend_lower = trend_bullish_curr ? low - (low * 0.002) : trend_bearish_curr ? low - (low * 0.002) : low - (low * 0.001)
 trend_color = trend_bullish_curr ? bull_color : trend_bearish_curr ? bear_color : neutral_color
-fill(plot(show_trend ? trend_upper : na, "Trend Upper", color.new(trend_color, 50), 2), plot(show_trend ? trend_lower : na, "Trend Lower", color.new(trend_color, 50), 2), color=color.new(trend_color, 65), title="Trend Cloud")
+fill(plot(show_trend ? trend_upper : na, "Trend Upper", color.new(trend_color, 50), 2), plot(show_trend ? trend_lower : na, "Trend Lower", color.new(trend_color, 50), 2), color=color.new(trend_color, 75), title="Trend Cloud")
 
 // Horizontal line from lower boundary 3 bars ago
 var line lower_boundary_line = na

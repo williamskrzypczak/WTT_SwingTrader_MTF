@@ -3,511 +3,494 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WTT Swing Trader MTF R1.10 - Quick Reference Guide</title>
+    <title>WTT Swing Trader MTF R1.11 - Quick Reference</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
             margin: 0;
             padding: 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #333;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: #e0e0e0;
+            line-height: 1.6;
         }
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            background: white;
+            background: rgba(0, 0, 0, 0.8);
             border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            overflow: hidden;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
         .header {
-            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
-            color: white;
-            padding: 30px;
             text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #ff8c42 0%, #8b5cf6 100%);
+            border-radius: 10px;
+            color: white;
         }
         .header h1 {
             margin: 0;
             font-size: 2.5em;
-            font-weight: 300;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         }
         .header p {
             margin: 10px 0 0 0;
             font-size: 1.2em;
             opacity: 0.9;
         }
-        .content {
-            padding: 30px;
-        }
         .section {
             margin-bottom: 30px;
             padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
             border-radius: 10px;
-            background: #f8f9fa;
-            border-left: 5px solid #ff6b6b;
+            border-left: 4px solid #ff8c42;
         }
         .section h2 {
-            color: #2c3e50;
+            color: #ff8c42;
             margin-top: 0;
             font-size: 1.8em;
         }
-        .section h3 {
-            color: #34495e;
-            margin-top: 20px;
-            font-size: 1.4em;
-        }
-        .feature-grid {
+        .signal-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 20px;
             margin-top: 20px;
         }
-        .feature-card {
-            background: white;
+        .signal-card {
+            background: rgba(255, 255, 255, 0.1);
             padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            border-left: 4px solid #3498db;
+            border-radius: 10px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
         }
-        .feature-card h4 {
-            color: #2c3e50;
+        .signal-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+        .signal-card.long {
+            border-color: #ff8c42;
+            background: linear-gradient(135deg, rgba(255, 140, 66, 0.1) 0%, rgba(255, 140, 66, 0.05) 100%);
+        }
+        .signal-card.short {
+            border-color: #8b5cf6;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(139, 92, 246, 0.05) 100%);
+        }
+        .signal-card h3 {
             margin-top: 0;
-            font-size: 1.2em;
+            color: #ff8c42;
+            font-size: 1.3em;
         }
-        .signal-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        .signal-card.short h3 {
+            color: #8b5cf6;
         }
-        .signal-table th {
-            background: #34495e;
-            color: white;
-            padding: 12px;
-            text-align: left;
-        }
-        .signal-table td {
-            padding: 10px 12px;
-            border-bottom: 1px solid #ecf0f1;
-        }
-        .signal-table tr:nth-child(even) {
-            background: #f8f9fa;
-        }
-        .bullish {
-            color: #27ae60;
-            font-weight: bold;
-        }
-        .bearish {
-            color: #e74c3c;
-            font-weight: bold;
-        }
-        .neutral {
-            color: #7f8c8d;
-            font-weight: bold;
-        }
-        .code-block {
-            background: #2c3e50;
-            color: #ecf0f1;
-            padding: 15px;
+        .condition {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
             border-radius: 5px;
-            font-family: 'Courier New', monospace;
             margin: 10px 0;
-            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
         }
-        .alert-box {
-            background: #fff3cd;
-            border: 1px solid #ffeaa7;
+        .visual-desc {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 10px;
             border-radius: 5px;
-            padding: 15px;
-            margin: 15px 0;
+            margin: 10px 0;
+            border-left: 3px solid #ff8c42;
         }
-        .alert-box h4 {
-            color: #856404;
-            margin-top: 0;
-        }
-        .version-info {
-            background: #e8f5e8;
-            border: 1px solid #c3e6c3;
+        .alert-msg {
+            background: rgba(255, 140, 66, 0.2);
+            padding: 10px;
             border-radius: 5px;
-            padding: 15px;
-            margin: 15px 0;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            border: 1px solid #ff8c42;
         }
-        .version-info h4 {
-            color: #155724;
-            margin-top: 0;
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+        .feature-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .feature-list li:before {
+            content: "▶";
+            color: #ff8c42;
+            margin-right: 10px;
+        }
+        .version-history {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        .version-item {
+            margin-bottom: 15px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            border-left: 4px solid #ff8c42;
+        }
+        .version-item h4 {
+            margin: 0 0 10px 0;
+            color: #ff8c42;
+        }
+        .version-item ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        .version-item li {
+            margin: 5px 0;
         }
         .status-table {
-            background: #2c3e50;
-            color: white;
-            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
             padding: 15px;
+            border-radius: 8px;
             margin: 15px 0;
+        }
+        .status-table h4 {
+            color: #ff8c42;
+            margin-top: 0;
+        }
+        .status-table p {
+            margin: 5px 0;
             font-family: 'Courier New', monospace;
         }
-        .status-table table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .status-table th, .status-table td {
-            padding: 8px;
-            text-align: center;
-            border: 1px solid #34495e;
-        }
-        .status-table th {
-            background: #34495e;
-        }
-        .green-bg { background: #27ae60; }
-        .red-bg { background: #e74c3c; }
-        .gray-bg { background: #7f8c8d; }
-        .yellow-bg { background: #f39c12; }
-        .orange-bg { background: #e67e22; }
-        .blue-bg { background: #3498db; }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-                    <h1>WTT Swing Trader MTF R1.10</h1>
-        <p>WaveRider Trading Technologies - Multi-Timeframe Syzygy Trading Indicator</p>
-            <p>Quick Reference Guide</p>
+            <h1>WTT Swing Trader MTF R1.11</h1>
+            <p>Multi-Timeframe Syzygy Trading Indicator</p>
         </div>
-        
-        <div class="content">
-            <div class="version-info">
-                <h4>🆕 Version R1.7 - Enhanced Status Table & Color Coding</h4>
-                <p>New feature: Redesigned status table with individual color-coded columns and enhanced visual feedback system.</p>
-            </div>
 
-            <div class="section">
-                <h2>🎯 Core Concept</h2>
-                <p>The WTT Swing Trader MTF combines multi-timeframe trend analysis with current timeframe signal generation to identify high-probability Syzygy trading opportunities. The indicator requires alignment across Daily, 4-hour, 1-hour, and current timeframes for maximum signal reliability.</p>
-            </div>
+        <div class="section">
+            <h2>🎯 Signal Types & Conditions</h2>
+            <div class="signal-grid">
+                <div class="signal-card long">
+                    <h3>D+4H+1H+CTF LONG</h3>
+                    <div class="condition">
+                        <strong>Conditions:</strong><br>
+                        • Daily: Bullish<br>
+                        • 4H: Bullish<br>
+                        • 1H: Bullish<br>
+                        • CTF: Bullish<br>
+                        • MACD: Bullish<br>
+                        • RSI: 40-80<br>
+                        • Volume: High
+                    </div>
+                    <div class="visual-desc">
+                        <strong>Visual:</strong> Large Green Triangle (Below Bar)
+                    </div>
+                    <div class="alert-msg">
+                        🟢 Syzygy D+4H+1H+CTF LONG<br>
+                        {Ticker}<br>
+                        Price: {Price}
+                    </div>
+                </div>
 
-            <div class="section">
-                <h2>📊 Multi-Timeframe Analysis</h2>
-                <div class="feature-grid">
-                    <div class="feature-card">
-                        <h4>Daily Timeframe (Primary)</h4>
-                        <p>Establishes the overall market trend using EMA alignment (12, 26, 50 periods). All signals require daily trend confirmation.</p>
+                <div class="signal-card short">
+                    <h3>D+4H+1H+CTF SHORT</h3>
+                    <div class="condition">
+                        <strong>Conditions:</strong><br>
+                        • Daily: Bearish<br>
+                        • 4H: Bearish<br>
+                        • 1H: Bearish<br>
+                        • CTF: Bearish<br>
+                        • MACD: Bearish<br>
+                        • RSI: 20-60<br>
+                        • Volume: High
                     </div>
-                    <div class="feature-card">
-                        <h4>4-Hour Timeframe</h4>
-                        <p>Provides intermediate trend confirmation. Must align with daily trend for signal validation.</p>
+                    <div class="visual-desc">
+                        <strong>Visual:</strong> Large Red Triangle (Above Bar)
                     </div>
-                    <div class="feature-card">
-                        <h4>1-Hour Timeframe</h4>
-                        <p>Offers short-term trend confirmation. Must align with higher timeframes for signal validation.</p>
+                    <div class="alert-msg">
+                        🔴 Syzygy D+4H+1H+CTF SHORT<br>
+                        {Ticker}<br>
+                        Price: {Price}
                     </div>
-                    <div class="feature-card">
-                        <h4>Current Timeframe</h4>
-                        <p>Generates entry signals based on local momentum and volume confirmation.</p>
+                </div>
+
+                <div class="signal-card long">
+                    <h3>4H+1H+CTF LONG</h3>
+                    <div class="condition">
+                        <strong>Conditions:</strong><br>
+                        • 4H: Bullish<br>
+                        • 1H: Bullish<br>
+                        • CTF: Bullish<br>
+                        • MACD: Bullish<br>
+                        • RSI: 40-80<br>
+                        • Volume: High
+                    </div>
+                    <div class="visual-desc">
+                        <strong>Visual:</strong> Normal Blue Triangle (Below Bar)
+                    </div>
+                    <div class="alert-msg">
+                        🟢 Syzygy 4H+1H+CTF LONG<br>
+                        {Ticker}<br>
+                        Price: {Price}
+                    </div>
+                </div>
+
+                <div class="signal-card short">
+                    <h3>4H+1H+CTF SHORT</h3>
+                    <div class="condition">
+                        <strong>Conditions:</strong><br>
+                        • 4H: Bearish<br>
+                        • 1H: Bearish<br>
+                        • CTF: Bearish<br>
+                        • MACD: Bearish<br>
+                        • RSI: 20-60<br>
+                        • Volume: High
+                    </div>
+                    <div class="visual-desc">
+                        <strong>Visual:</strong> Normal Purple Triangle (Above Bar)
+                    </div>
+                    <div class="alert-msg">
+                        🔴 Syzygy 4H+1H+CTF SHORT<br>
+                        {Ticker}<br>
+                        Price: {Price}
+                    </div>
+                </div>
+
+                <div class="signal-card long">
+                    <h3>1H+CTF LONG</h3>
+                    <div class="condition">
+                        <strong>Conditions:</strong><br>
+                        • 1H: Bullish<br>
+                        • CTF: Bullish<br>
+                        • MACD: Bullish<br>
+                        • RSI: 40-80<br>
+                        • Volume: High
+                    </div>
+                    <div class="visual-desc">
+                        <strong>Visual:</strong> Small Orange Triangle (Below Bar)
+                    </div>
+                    <div class="alert-msg">
+                        🟢 Syzygy 1H+CTF LONG<br>
+                        {Ticker}<br>
+                        Price: {Price}
+                    </div>
+                </div>
+
+                <div class="signal-card short">
+                    <h3>1H+CTF SHORT</h3>
+                    <div class="condition">
+                        <strong>Conditions:</strong><br>
+                        • 1H: Bearish<br>
+                        • CTF: Bearish<br>
+                        • MACD: Bearish<br>
+                        • RSI: 20-60<br>
+                        • Volume: High
+                    </div>
+                    <div class="visual-desc">
+                        <strong>Visual:</strong> Small Yellow Triangle (Above Bar)
+                    </div>
+                    <div class="alert-msg">
+                        🔴 Syzygy 1H+CTF SHORT<br>
+                        {Ticker}<br>
+                        Price: {Price}
                     </div>
                 </div>
             </div>
+        </div>
 
-            <div class="section">
-                <h2>🚦 Signal Generation</h2>
-                <table class="signal-table">
-                    <thead>
-                        <tr>
-                            <th>Signal Type</th>
-                            <th>Requirements</th>
-                            <th>Visual Indicator</th>
-                            <th>Alert</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="bullish">D+4H+1H+CTF Long</td>
-                            <td>All timeframes bullish + MACD > Signal + RSI 40-80 + Volume high + Close > Fast EMA</td>
-                            <td>Large Green Triangle (Up)</td>
-                            <td>🟢 Syzygy D+4H+1H+CTF LONG</td>
-                        </tr>
-                        <tr>
-                            <td class="bearish">D+4H+1H+CTF Short</td>
-                            <td>All timeframes bearish + MACD < Signal + RSI 20-60 + Volume high + Close < Fast EMA</td>
-                            <td>Large Red Triangle (Down)</td>
-                            <td>🔴 Syzygy D+4H+1H+CTF SHORT</td>
-                        </tr>
-                        <tr>
-                            <td class="bullish">4H+1H+CTF Long</td>
-                            <td>4H+1H+CTF bullish + MACD > Signal + RSI 40-80 + Volume high</td>
-                            <td>Normal Blue Triangle (Up)</td>
-                            <td>🟢 Syzygy 4H+1H+CTF LONG</td>
-                        </tr>
-                        <tr>
-                            <td class="bearish">4H+1H+CTF Short</td>
-                            <td>4H+1H+CTF bearish + MACD < Signal + RSI 20-60 + Volume high</td>
-                            <td>Normal Purple Triangle (Down)</td>
-                            <td>🔴 Syzygy 4H+1H+CTF SHORT</td>
-                        </tr>
-                        <tr>
-                            <td class="bullish">1H+CTF Long</td>
-                            <td>1H+CTF bullish + MACD > Signal + RSI 40-80 + Volume high</td>
-                            <td>Small Orange Triangle (Up)</td>
-                            <td>🟢 Syzygy 1H+CTF LONG</td>
-                        </tr>
-                        <tr>
-                            <td class="bearish">1H+CTF Short</td>
-                            <td>1H+CTF bearish + MACD < Signal + RSI 20-60 + Volume high</td>
-                            <td>Small Yellow Triangle (Down)</td>
-                            <td>🔴 Syzygy 1H+CTF SHORT</td>
-                        </tr>
-                        <tr>
-                            <td class="bullish">Trend Change Bullish</td>
-                            <td>Current timeframe transitions to bullish</td>
-                            <td>Small Orange Triangle (Up)</td>
-                            <td>🟢 TREND CHANGE: BULLISH</td>
-                        </tr>
-                        <tr>
-                            <td class="bearish">Trend Change Bearish</td>
-                            <td>Current timeframe transitions to bearish</td>
-                            <td>Small Purple Triangle (Down)</td>
-                            <td>🔴 TREND CHANGE: BEARISH</td>
-                        </tr>
-                    </tbody>
-                </table>
+        <div class="section">
+            <h2>📊 Status Table Information</h2>
+            <div class="status-table">
+                <h4>Last Signal Row</h4>
+                <p>The "Last Signal" row in the status table shows the most recent signal that fired and persists until a new signal occurs. The row background color matches the triangle color for perfect synchronization.</p>
+                <p><strong>Color Coding:</strong></p>
+                <ul>
+                    <li><strong>Green Background:</strong> D+4H+1H+CTF LONG</li>
+                    <li><strong>Red Background:</strong> D+4H+1H+CTF SHORT</li>
+                    <li><strong>Blue Background:</strong> 4H+1H+CTF LONG</li>
+                    <li><strong>Purple Background:</strong> 4H+1H+CTF SHORT</li>
+                    <li><strong>Orange Background:</strong> 1H+CTF LONG</li>
+                    <li><strong>Yellow Background:</strong> 1H+CTF SHORT (with black text for readability)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🎨 Visual Elements</h2>
+            <ul class="feature-list">
+                <li><strong>Progressive Triangle Sizing:</strong> Large (D+4H+1H+CTF), Normal (4H+1H+CTF), Small (1H+CTF)</li>
+                <li><strong>Trend Cloud:</strong> Fill area 75% opacity, boundary lines 50% opacity</li>
+                <li><strong>Dynamic Colors:</strong> Orange (bullish), Purple (bearish), Gray (neutral)</li>
+                <li><strong>Perfect Synchronization:</strong> Triangle colors match status table row colors exactly</li>
+                <li><strong>Enhanced Readability:</strong> Dynamic text color adjustment for yellow backgrounds</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>⚙️ R1.11 Features</h2>
+            <ul class="feature-list">
+                <li><strong>Trend Cloud Opacity Optimization:</strong> Enhanced transparency settings for improved chart visibility</li>
+                <li><strong>Fill Area Opacity:</strong> 75% for optimal visual balance</li>
+                <li><strong>Boundary Line Opacity:</strong> 50% for clear contrast</li>
+                <li><strong>Visual Hierarchy:</strong> Improved chart readability without compromising trend indication</li>
+                <li><strong>Fine-tuned Settings:</strong> Optimal user experience with balanced visibility</li>
+            </ul>
+        </div>
+
+        <div class="version-history">
+            <h2>📋 Version History</h2>
+            
+            <div class="version-item">
+                <h4>R1.11 - Trend Cloud Opacity Optimization (Current)</h4>
+                <ul>
+                    <li>Optimized trend cloud transparency for improved chart visibility</li>
+                    <li>Adjusted fill area opacity to 75% for better visual balance</li>
+                    <li>Maintained boundary line opacity at 50% for clear contrast</li>
+                    <li>Enhanced visual hierarchy while preserving trend cloud functionality</li>
+                    <li>Improved chart readability without compromising trend indication</li>
+                    <li>Fine-tuned opacity settings for optimal user experience</li>
+                </ul>
             </div>
 
-            <div class="section">
-                <h2>📈 Enhanced Status Table (NEW R1.10)</h2>
-                <div class="status-table">
-                    <table>
-                        <tr>
-                            <th>D</th>
-                            <th>4H</th>
-                            <th>1H</th>
-                            <th>CTF</th>
-                        </tr>
-                        <tr>
-                            <td class="green-bg">BULL</td>
-                            <td class="green-bg">BULL</td>
-                            <td class="green-bg">BULL</td>
-                            <td class="green-bg">BULL</td>
-                        </tr>
-                        <tr>
-                            <td class="red-bg">RSI:65.2</td>
-                            <td class="green-bg">MACD:BULL</td>
-                            <td class="yellow-bg">ATR:HIGH</td>
-                            <td class="orange-bg">VOL:HIGH</td>
-                        </tr>
-                        <tr>
-                            <td class="green-bg" colspan="4">D+4H+1H+CTF LONG</td>
-                        </tr>
-                    </table>
-                </div>
-                <div class="feature-grid">
-                    <div class="feature-card">
-                        <h4>Trend Row Color Coding</h4>
-                        <p><strong>Green:</strong> Bullish trend (BULL)</p>
-                        <p><strong>Red:</strong> Bearish trend (BEAR)</p>
-                        <p><strong>Gray:</strong> Neutral trend (NEUT)</p>
-                    </div>
-                    <div class="feature-card">
-                        <h4>Indicators Row Color Coding</h4>
-                        <p><strong>RSI:</strong> Red (overbought), Green (oversold), White (normal)</p>
-                        <p><strong>MACD:</strong> Green (bullish), Red (bearish)</p>
-                        <p><strong>ATR:</strong> Yellow (high), Gray (normal)</p>
-                        <p><strong>Volume:</strong> Orange (high), Blue (low), Gray (normal)</p>
-                    </div>
-                </div>
-                <div class="alert-box">
-                    <h4>💡 Status Table Features</h4>
-                    <ul>
-                        <li><strong>Individual Timeframe Columns:</strong> Each timeframe has its own column for clear trend alignment</li>
-                        <li><strong>Color-Coded Values:</strong> Intuitive color system for quick status assessment</li>
-                        <li><strong>Persistent Last Trade:</strong> Shows the most recent signal type that fired</li>
-                        <li><strong>Compact Layout:</strong> Optimized for maximum information in minimal space</li>
-                        <li><strong>Real-Time Updates:</strong> All values update dynamically with market conditions</li>
-                    </ul>
-                </div>
+            <div class="version-item">
+                <h4>R1.10 - Perfect Triangle-Table-Alert Synchronization & Progressive Sizing</h4>
+                <ul>
+                    <li>Implemented perfect synchronization between triangle colors and status table row colors</li>
+                    <li>Added progressive triangle sizing based on timeframe alignment confidence</li>
+                    <li>Large triangles for D+4H+1H+CTF signals (highest confidence - 4 timeframes)</li>
+                    <li>Normal triangles for 4H+1H+CTF signals (medium confidence - 3 timeframes)</li>
+                    <li>Small triangles for 1H+CTF signals (lower confidence - 2 timeframes)</li>
+                    <li>Enhanced text readability with dynamic color adjustment for yellow backgrounds</li>
+                    <li>Restored original detailed condition logic in alerts while maintaining synchronization</li>
+                    <li>Optimized visual hierarchy for immediate signal strength recognition</li>
+                    <li>Fixed triangle visibility issues with appropriate sizing for all signal types</li>
+                </ul>
             </div>
 
-            <div class="section">
-                <h2>📈 Dynamic Boundary Line System</h2>
-                <div class="feature-grid">
-                    <div class="feature-card">
-                        <h4>Lower Boundary Line</h4>
-                        <p><strong>Trigger:</strong> Syzygy long entry OR trend change bullish</p>
-                        <p><strong>Origin:</strong> Lower boundary level from 3 bars before current price</p>
-                        <p><strong>Style:</strong> Red dotted horizontal line, 20 bars long</p>
-                        <p><strong>Behavior:</strong> Continuously updates to maintain 3-bar historical reference</p>
-                    </div>
-                    <div class="feature-card">
-                        <h4>Upper Boundary Line</h4>
-                        <p><strong>Trigger:</strong> Syzygy short entry OR trend change bearish</p>
-                        <p><strong>Origin:</strong> Upper boundary level from 3 bars before current price</p>
-                        <p><strong>Style:</strong> Red dotted horizontal line, 20 bars long</p>
-                        <p><strong>Behavior:</strong> Continuously updates to maintain 3-bar historical reference</p>
-                    </div>
-                </div>
-                <div class="alert-box">
-                    <h4>💡 Boundary Line Features</h4>
-                    <ul>
-                        <li><strong>Historical Reference:</strong> Lines originate from boundary levels 3 bars before current price</li>
-                        <li><strong>Perfectly Horizontal:</strong> No slope - clean visual reference</li>
-                        <li><strong>Dynamic Updates:</strong> Lines move forward with current price while maintaining historical origin</li>
-                        <li><strong>Auto-Deletion:</strong> Lines disappear when price trades through boundary levels</li>
-                        <li><strong>Signal-Specific:</strong> Different lines for bullish vs bearish signals</li>
-                    </ul>
-                </div>
+            <div class="version-item">
+                <h4>R1.9 - Multi-Timeframe Alert System & Enhanced Signal Hierarchy</h4>
+                <ul>
+                    <li>Implemented comprehensive multi-timeframe alert system with three signal types</li>
+                    <li>Added D+4H+1H+CTF alerts for highest confidence swing trades</li>
+                    <li>Added 4H+1H+CTF alerts for medium-term trades with high confidence</li>
+                    <li>Added 1H+CTF alerts for short-term trades with medium confidence</li>
+                    <li>Enhanced alert descriptions to clearly show timeframe alignments</li>
+                    <li>Simplified alert messages for reliable delivery and quick action</li>
+                    <li>Optimized signal hierarchy for different trading timeframes and risk levels</li>
+                </ul>
             </div>
 
-            <div class="section">
-                <h2>🎨 Visual Elements</h2>
-                <div class="feature-grid">
-                    <div class="feature-card">
-                        <h4>Trend Cloud</h4>
-                        <p>Dynamic cloud around price showing trend boundaries with customizable transparency (65% default).</p>
-                    </div>
-                    <div class="feature-card">
-                        <h4>EMA Lines</h4>
-                        <p>Optional display of Fast (12), Slow (26), and Trend (50) EMAs for technical analysis.</p>
-                    </div>
-                    <div class="feature-card">
-                        <h4>ATR Exit Signals</h4>
-                        <p>Diamond-shaped markers indicating high volatility exit conditions based on ATR analysis.</p>
-                    </div>
-                    <div class="feature-card">
-                        <h4>Enhanced Status Table</h4>
-                        <p>Real-time display with color-coded values showing trend status, indicator values, and trade history.</p>
-                    </div>
-                </div>
+            <div class="version-item">
+                <h4>R1.8 - Syzygy Alert System & Visual Enhancement</h4>
+                <ul>
+                    <li>Changed alert names from "Swing Alert" to "Syzygy alerts"</li>
+                    <li>Added color-coded signal triangles for visual distinction</li>
+                    <li>Implemented persistent last signal display in status table</li>
+                    <li>Perfect synchronization between triangle colors and table row colors</li>
+                </ul>
             </div>
 
-            <div class="section">
-                <h2>⚙️ Settings & Configuration</h2>
-                <div class="feature-grid">
-                    <div class="feature-card">
-                        <h4>Display Toggles</h4>
-                        <ul>
-                            <li><strong>Show Entry/Exit Signals:</strong> Toggle main signal visibility</li>
-                            <li><strong>Show Trend Direction:</strong> Toggle trend cloud display</li>
-                            <li><strong>Show EMAs:</strong> Toggle EMA line visibility</li>
-                        </ul>
-                    </div>
-                    <div class="feature-card">
-                        <h4>Color Scheme</h4>
-                        <ul>
-                            <li><strong>Bullish:</strong> Orange (default)</li>
-                            <li><strong>Bearish:</strong> Purple (default)</li>
-                            <li><strong>Neutral:</strong> Gray (default)</li>
-                        </ul>
-                    </div>
-                    <div class="feature-card">
-                        <h4>Hardcoded Parameters</h4>
-                        <ul>
-                            <li><strong>EMA:</strong> 12, 26, 50 periods</li>
-                            <li><strong>MACD:</strong> 12, 26, 9 periods</li>
-                            <li><strong>RSI:</strong> 14 periods</li>
-                            <li><strong>Volume MA:</strong> 20 periods</li>
-                        </ul>
-                    </div>
-                </div>
+            <div class="version-item">
+                <h4>R1.7 - Enhanced Status Table & Color Coding</h4>
+                <ul>
+                    <li>Redesigned status table with individual color-coded timeframe columns</li>
+                    <li>Added color-coded trend values: Green (BULL), Red (BEAR), Gray (NEUT)</li>
+                    <li>Implemented color-coded indicator values: RSI (red/green), MACD (green/red), ATR (yellow/gray), Volume (orange/blue/gray)</li>
+                    <li>Enhanced last trade type tracking with persistent signal history</li>
+                    <li>Improved table layout with better alignment and visual balance</li>
+                    <li>Removed redundant columns and rows for cleaner, more focused display</li>
+                    <li>Optimized visual feedback for multi-timeframe trend alignment</li>
+                    <li>Enhanced user experience with intuitive color coding system</li>
+                </ul>
             </div>
 
-            <div class="section">
-                <h2>🔔 Alert System</h2>
-                <p>The indicator provides comprehensive alerts with detailed market information:</p>
-                <div class="code-block">
-Entry Alerts Include:
-• Signal type and direction
-• Current price (5 decimal precision)
-• RSI value
-• MACD line value
-• Symbol information
-
-Trend Change Alerts Include:
-• Trend transition information
-• All MACD components (line, signal, histogram)
-• Current trend status
-• Complete market context
-                </div>
+            <div class="version-item">
+                <h4>R1.6 - Dynamic Boundary Line System</h4>
+                <ul>
+                    <li>Implemented dynamic boundary line system with historical reference points</li>
+                    <li>Added separate triggers for bullish and bearish boundary lines</li>
+                    <li>Lower boundary lines trigger on swing long entries or trend change bullish</li>
+                    <li>Upper boundary lines trigger on swing short entries or trend change bearish</li>
+                    <li>Lines originate from boundary levels 3 bars before current price</li>
+                    <li>Lines are perfectly horizontal and extend 20 bars ahead</li>
+                    <li>Lines continuously update to maintain 3-bar historical reference</li>
+                    <li>Lines delete when price trades through boundary levels</li>
+                    <li>Enhanced visual reference system for boundary evolution tracking</li>
+                </ul>
             </div>
 
-            <div class="section">
-                <h2>📋 Status Table Information</h2>
-                <table class="signal-table">
-                    <thead>
-                        <tr>
-                            <th>Row</th>
-                            <th>Information</th>
-                            <th>Details</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Trend (All TF)</td>
-                            <td>Individual timeframe trend status with color coding</td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>Indicators</td>
-                            <td>Color-coded RSI, MACD, ATR, and Volume status</td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>Last Trade</td>
-                            <td>Type of the last signal that fired (spans all columns)</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="version-item">
+                <h4>R1.5 - Performance Analytics Enhancement</h4>
+                <ul>
+                    <li>Consolidated RSI, MACD, ATR, and Volume into single table row for cleaner display</li>
+                    <li>Updated indicator name to include version number for better identification</li>
+                    <li>Enhanced performance tracking based on Stop Loss (SL), Profit Target (PT), and Trailing Stop (TS)</li>
+                    <li>Added detailed exit breakdowns showing SL/PT/TS counts separately</li>
+                    <li>Improved success rate calculation using PT and TS exits as successful trades</li>
+                    <li>Expanded status table with active trade indicator and comprehensive metrics</li>
+                </ul>
             </div>
 
-            <div class="section">
-                <h2>🎯 Trading Strategy</h2>
-                <div class="alert-box">
-                    <h4>Conservative Approach (Default)</h4>
-                    <p>The indicator uses conservative settings by default, requiring strong multi-timeframe alignment for signal generation. This reduces false signals and focuses on high-probability trading opportunities.</p>
-                </div>
-                <div class="feature-grid">
-                    <div class="feature-card">
-                        <h4>Entry Criteria</h4>
-                        <ul>
-                            <li>Multi-timeframe trend alignment</li>
-                            <li>MACD momentum confirmation</li>
-                            <li>RSI in optimal ranges</li>
-                            <li>Above-average volume</li>
-                            <li>Price relative to fast EMA</li>
-                        </ul>
-                    </div>
-                    <div class="feature-card">
-                        <h4>Risk Management</h4>
-                        <ul>
-                            <li>Use boundary lines as support/resistance</li>
-                            <li>Monitor trend cloud breaches</li>
-                            <li>Watch for ATR exit signals</li>
-                            <li>Follow multi-timeframe trend direction</li>
-                        </ul>
-                    </div>
-                </div>
+            <div class="version-item">
+                <h4>R1.4 - Comprehensive Feature Integration</h4>
+                <ul>
+                    <li>Final release with complete multi-timeframe swing trading functionality</li>
+                    <li>Integrated daily trend analysis with current timeframe signal generation</li>
+                    <li>Added comprehensive alert system with dynamic price and indicator information</li>
+                    <li>Implemented volume confirmation for enhanced signal validation</li>
+                    <li>Created trend cloud visualization with customizable transparency settings</li>
+                    <li>Enhanced dark-themed status table with real-time market information</li>
+                    <li>Optimized color scheme for better visual clarity and professional appearance</li>
+                </ul>
             </div>
 
-            <div class="section">
-                <h2>📝 Version History Summary</h2>
-                <div class="feature-grid">
-                    <div class="feature-card">
-                        <h4>R1.7 (Current)</h4>
-                        <p>Enhanced status table with color coding and improved visual feedback</p>
-                    </div>
-                    <div class="feature-card">
-                        <h4>R1.6</h4>
-                        <p>Dynamic boundary line system with historical reference points</p>
-                    </div>
-                    <div class="feature-card">
-                        <h4>R1.5</h4>
-                        <p>Performance analytics enhancement and table consolidation</p>
-                    </div>
-                    <div class="feature-card">
-                        <h4>R1.0-R1.4</h4>
-                        <p>Core functionality, alerts, visual enhancements, and UI improvements</p>
-                    </div>
-                </div>
+            <div class="version-item">
+                <h4>R1.3 - Visual Enhancement and Alert System</h4>
+                <ul>
+                    <li>Added trend change alerts synchronized with visual trend indicators</li>
+                    <li>Implemented ATR-based exit signals with diamond-shaped markers</li>
+                    <li>Enhanced visual elements including trend cloud and signal markers</li>
+                    <li>Improved alert system with comprehensive market data integration</li>
+                    <li>Added trend transition detection for early market movement identification</li>
+                    <li>Optimized visual feedback for better user experience</li>
+                </ul>
+            </div>
+
+            <div class="version-item">
+                <h4>R1.2 - Alert System Enhancement</h4>
+                <ul>
+                    <li>Enhanced alert messages with detailed price points and currency information</li>
+                    <li>Added comprehensive market data to alert notifications</li>
+                    <li>Improved alert frequency management for better signal quality</li>
+                    <li>Integrated RSI and MACD values into alert messages for complete context</li>
+                    <li>Enhanced user notification system for better trade management</li>
+                </ul>
+            </div>
+
+            <div class="version-item">
+                <h4>R1.1 - Visual Design and User Interface</h4>
+                <ul>
+                    <li>Improved visual elements and implemented professional color scheme</li>
+                    <li>Enhanced user interface with better contrast and readability</li>
+                    <li>Optimized color coding: Orange (bullish), Purple (bearish), Gray (neutral)</li>
+                    <li>Improved table layout and information display</li>
+                    <li>Enhanced overall visual appeal and professional appearance</li>
+                </ul>
+            </div>
+
+            <div class="version-item">
+                <h4>R1.0 - Initial Release</h4>
+                <ul>
+                    <li>Multi-timeframe Syzygy trading foundation: Daily trend + Current timeframe signals</li>
+                    <li>Trend detection: EMA alignment (12, 26, 50 periods)</li>
+                    <li>MACD and RSI momentum confirmation: Enhanced signal validation</li>
+                    <li>Dynamic Support/Resistance levels: Pivot point calculations</li>
+                    <li>Entry/Exit signals: Comprehensive alert system</li>
+                    <li>Volume confirmation: Signal validation and market strength assessment</li>
+                    <li>Conservative approach: Default settings for reliable trading</li>
+                    <li>Foundation: WaveRider Trading Technologies swing trading methodology</li>
+                </ul>
             </div>
         </div>
     </div>
