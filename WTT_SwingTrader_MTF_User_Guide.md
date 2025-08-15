@@ -11,12 +11,9 @@
 2. [Initial Setup](#initial-setup)
 3. [Understanding the Indicator](#understanding-the-indicator)
 4. [Signal Interpretation](#signal-interpretation)
-5. [Visual Elements](#visual-elements)
-6. [Status Table Guide](#status-table-guide)
-7. [Alert System](#alert-system)
-8. [Best Practices](#best-practices)
-9. [Troubleshooting](#troubleshooting)
-10. [FAQ](#faq)
+5. [Best Practices](#best-practices)
+6. [Troubleshooting](#troubleshooting)
+7. [FAQ](#faq)
 
 ---
 
@@ -139,92 +136,6 @@ Signals are generated when ALL of the following conditions are met:
 - **Strong Signal**: All timeframes aligned + high volume + clear momentum
 - **Moderate Signal**: Most timeframes aligned + moderate volume
 - **Weak Signal**: Few timeframes aligned + low volume
-
----
-
-## 🎨 **VISUAL ELEMENTS**
-
-### **Signal Triangles**
-- **Large Triangles**: D+4H+1H+CTF signals (highest confidence)
-- **Normal Triangles**: 4H+1H+CTF signals (high confidence)
-- **Small Triangles**: 1H+CTF signals (medium confidence)
-
-### **Triangle Colors**
-- **🟢 Green**: Long signals (bullish)
-- **🔴 Red**: Short signals (bearish)
-- **🔵 Blue**: 4H+1H+CTF long signals
-- ** Purple**: 4H+1H+CTF short signals
-- **🟠 Orange**: 1H+CTF long signals
-- **🟡 Yellow**: 1H+CTF short signals
-
-### **Trend Cloud**
-- **Orange Cloud**: Bullish trend environment
-- **Purple Cloud**: Bearish trend environment
-- **Gray Cloud**: Neutral/transitional environment
-
-### **Boundary Lines**
-- **Red Dotted Lines**: Dynamic support/resistance levels
-- **Origin**: 3 bars before current price
-- **Extension**: 20 bars ahead
-- **Purpose**: Trade management and exit planning
-
----
-
-## 📋 **STATUS TABLE GUIDE**
-
-### **Multi-Timeframe Trend Status**
-The status table shows the current trend for each timeframe:
-
-```
-D    4H   1H   CTF
-BULL BULL BULL BULL  ← All bullish = Strong long signal
-BEAR BEAR BEAR BEAR  ← All bearish = Strong short signal
-BULL BULL NEUT BULL  ← Mixed = Wait for alignment
-```
-
-### **Indicator Status**
-- **RSI**: Current RSI value with color coding
-- **MACD**: Bullish/Bearish status
-- **ATR**: Volatility level (High/Normal)
-- **Volume**: Volume status (High/Normal)
-
-### **Last Signal**
-- **Background Color**: Matches the triangle color that fired
-- **Text Color**: White (or black for yellow backgrounds)
-- **Information**: Shows the exact signal type that triggered
-
----
-
-## 🔔 **ALERT SYSTEM**
-
-### **Setting Up Alerts**
-
-#### **Step 1: Access Alert Settings**
-1. Right-click on the chart
-2. Select **"Add Alert"**
-3. Choose the WTT SwingTrader MTF indicator
-
-#### **Step 2: Configure Alert Conditions**
-- **Condition**: Select the signal type you want to monitor
-- **Frequency**: Set to **"Once Per Bar"** for best results
-- **Message**: Customize the alert message if desired
-
-#### **Step 3: Alert Types Available**
-1. **🟢 D+4H+1H+CTF LONG**: Highest confidence long signals
-2. **🔴 D+4H+1H+CTF SHORT**: Highest confidence short signals
-3. **🟢 4H+1H+CTF LONG**: High confidence long signals
-4. **🔴 4H+1H+CTF SHORT**: High confidence short signals
-5. **🟢 1H+CTF LONG**: Medium confidence long signals
-6. **🔴 1H+CTF SHORT**: Medium confidence short signals
-7. **🟢 TREND CHANGE: BULLISH**: Trend transition signals
-8. **🔴 TREND CHANGE: BEARISH**: Trend transition signals
-
-### **Alert Message Format**
-```
-🟢 Syzygy D+4H+1H+CTF LONG
-EURUSD
-Price: 1.08543
-```
 
 ---
 
