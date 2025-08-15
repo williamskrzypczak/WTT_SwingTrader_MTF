@@ -1,12 +1,23 @@
 //@version=5
-indicator("WTT Swing Trader MTF R1.9", shorttitle="WTT SwingTrader MTF R1.9", overlay=true)
+indicator("WTT Swing Trader MTF R1.10", shorttitle="WTT SwingTrader MTF R1.10", overlay=true)
 
 // ============================================================================
 // WTT SWING TRADER MTF - WaveRider Trading Technologies
 // ============================================================================
 // VERSION HISTORY
 // ============================================================================
-// R1.9 - Multi-Timeframe Alert System & Enhanced Signal Hierarchy (Current)
+// R1.10 - Perfect Triangle-Table-Alert Synchronization & Progressive Sizing (Current)
+// - Implemented perfect synchronization between triangle colors and status table row colors
+// - Added progressive triangle sizing based on timeframe alignment confidence
+// - Large triangles for D+4H+1H+CTF signals (highest confidence - 4 timeframes)
+// - Normal triangles for 4H+1H+CTF signals (medium confidence - 3 timeframes)
+// - Small triangles for 1H+CTF signals (lower confidence - 2 timeframes)
+// - Enhanced text readability with dynamic color adjustment for yellow backgrounds
+// - Restored original detailed condition logic in alerts while maintaining synchronization
+// - Optimized visual hierarchy for immediate signal strength recognition
+// - Fixed triangle visibility issues with appropriate sizing for all signal types
+//
+// R1.9 - Multi-Timeframe Alert System & Enhanced Signal Hierarchy
 // - Implemented comprehensive multi-timeframe alert system with three signal types
 // - Added D+4H+1H+CTF alerts for highest confidence swing trades
 // - Added 4H+1H+CTF alerts for medium-term trades with high confidence
@@ -182,6 +193,10 @@ trend_bearish_transition = trend_bearish_curr and not trend_bearish_curr[1]
 // Last trade type tracking
 var string last_trade_type = "NONE"
 
+// Last signal tracking for persistent display
+var string last_signal_text = "NONE"
+var color last_signal_color = color.gray
+
 // Update last trade type for signals
 if long_condition
     last_trade_type := "SWING LONG"
@@ -207,17 +222,23 @@ plot(show_emas ? ema_trend_curr : na, "Trend EMA", color=color.purple, linewidth
 
 
 
-// Plot signals with color coding
-plotshape(long_condition, "D+4H+1H+CTF Long Signal", shape.triangleup, location.belowbar, color.green, size=size.normal)
-plotshape(short_condition, "D+4H+1H+CTF Short Signal", shape.triangledown, location.abovebar, color.red, size=size.normal)
+// Signal condition variables for perfect synchronization
+signal_4h_1h_ctf_long = trend_bullish_4h and trend_bullish_1h and trend_bullish_curr and macd_line_curr > macd_signal_curr and rsi_curr > 40 and rsi_curr < 80 and volume_high
+signal_4h_1h_ctf_short = trend_bearish_4h and trend_bearish_1h and trend_bearish_curr and macd_line_curr < macd_signal_curr and rsi_curr < 60 and rsi_curr > 20 and volume_high
+signal_1h_ctf_long = trend_bullish_1h and trend_bullish_curr and macd_line_curr > macd_signal_curr and rsi_curr > 40 and rsi_curr < 80 and volume_high
+signal_1h_ctf_short = trend_bearish_1h and trend_bearish_curr and macd_line_curr < macd_signal_curr and rsi_curr < 60 and rsi_curr > 20 and volume_high
+
+// Plot signals with color coding - Progressive sizing based on timeframe alignment
+plotshape(long_condition, "D+4H+1H+CTF Long Signal", shape.triangleup, location.belowbar, color.green, size=size.large)
+plotshape(short_condition, "D+4H+1H+CTF Short Signal", shape.triangledown, location.abovebar, color.red, size=size.large)
 
 // Plot 4H+1H+CTF signals
-plotshape(trend_bullish_4h and trend_bullish_1h and trend_bullish_curr and macd_line_curr > macd_signal_curr and rsi_curr > 40 and rsi_curr < 80 and volume_high, "4H+1H+CTF Long Signal", shape.triangleup, location.belowbar, color.blue, size=size.normal)
-plotshape(trend_bearish_4h and trend_bearish_1h and trend_bearish_curr and macd_line_curr < macd_signal_curr and rsi_curr < 60 and rsi_curr > 20 and volume_high, "4H+1H+CTF Short Signal", shape.triangledown, location.abovebar, color.purple, size=size.normal)
+plotshape(signal_4h_1h_ctf_long, "4H+1H+CTF Long Signal", shape.triangleup, location.belowbar, color.blue, size=size.normal)
+plotshape(signal_4h_1h_ctf_short, "4H+1H+CTF Short Signal", shape.triangledown, location.abovebar, color.purple, size=size.normal)
 
 // Plot 1H+CTF signals
-plotshape(trend_bullish_1h and trend_bullish_curr and macd_line_curr > macd_signal_curr and rsi_curr > 40 and rsi_curr < 80 and volume_high, "1H+CTF Long Signal", shape.triangleup, location.belowbar, color.orange, size=size.normal)
-plotshape(trend_bearish_1h and trend_bearish_curr and macd_line_curr < macd_signal_curr and rsi_curr < 60 and rsi_curr > 20 and volume_high, "1H+CTF Short Signal", shape.triangledown, location.abovebar, color.yellow, size=size.normal)
+plotshape(signal_1h_ctf_long, "1H+CTF Long Signal", shape.triangleup, location.belowbar, color.orange, size=size.small)
+plotshape(signal_1h_ctf_short, "1H+CTF Short Signal", shape.triangledown, location.abovebar, color.yellow, size=size.small)
 
 
 
@@ -270,6 +291,36 @@ if not na(upper_boundary_line)
         line.delete(upper_boundary_line)
         upper_boundary_line := na
 
+
+// ============================================================================
+// SIGNAL DETECTION (runs on every bar)
+// ============================================================================
+
+// Update last signal when new signals fire (priority order)
+if long_condition
+    last_signal_text := "D+4H+1H+CTF LONG"
+    last_signal_color := color.green
+else if short_condition
+    last_signal_text := "D+4H+1H+CTF SHORT"
+    last_signal_color := color.red
+else if signal_4h_1h_ctf_short
+    last_signal_text := "4H+1H+CTF SHORT"
+    last_signal_color := color.purple
+else if signal_4h_1h_ctf_long
+    last_signal_text := "4H+1H+CTF LONG"
+    last_signal_color := color.blue
+else if signal_1h_ctf_short
+    last_signal_text := "1H+CTF SHORT"
+    last_signal_color := color.yellow
+else if signal_1h_ctf_long
+    last_signal_text := "1H+CTF LONG"
+    last_signal_color := color.orange
+else if trend_bearish_transition
+    last_signal_text := "TREND BEARISH"
+    last_signal_color := bear_color
+else if trend_bullish_transition
+    last_signal_text := "TREND BULLISH"
+    last_signal_color := bull_color
 
 // ============================================================================
 // TABLE DISPLAY
@@ -326,38 +377,41 @@ if barstate.islast
     table.cell(info_table, 3, 3, atr_text, text_color=atr_color, text_size=size.small)
     table.cell(info_table, 4, 3, vol_text, text_color=vol_color, text_size=size.small)
     
-    table.cell(info_table, 0, 4, "Last Trade", text_color=color.white, text_size=size.small)
-    last_trade_type_text = last_trade_type
-    last_trade_type_color = last_trade_type == "SWING LONG" or last_trade_type == "TREND BULLISH" ? bull_color : last_trade_type == "SWING SHORT" or last_trade_type == "TREND BEARISH" ? bear_color : neutral_color
-    table.cell(info_table, 1, 4, last_trade_type_text, text_color=color.white, bgcolor=last_trade_type_color, text_size=size.small)
-    table.cell(info_table, 2, 4, last_trade_type_text, text_color=color.white, bgcolor=last_trade_type_color, text_size=size.small)
-    table.cell(info_table, 3, 4, last_trade_type_text, text_color=color.white, bgcolor=last_trade_type_color, text_size=size.small)
-    table.cell(info_table, 4, 4, last_trade_type_text, text_color=color.white, bgcolor=last_trade_type_color, text_size=size.small)
+    table.cell(info_table, 0, 4, "Last Signal", text_color=color.white, text_size=size.small)
+    
+    // Determine text color based on background color for better readability
+    text_color = last_signal_color == color.yellow ? color.black : color.white
+    
+    table.cell(info_table, 0, 4, "Last Signal", text_color=text_color, bgcolor=last_signal_color, text_size=size.small)
+    table.cell(info_table, 1, 4, last_signal_text, text_color=text_color, bgcolor=last_signal_color, text_size=size.small)
+    table.cell(info_table, 2, 4, last_signal_text, text_color=text_color, bgcolor=last_signal_color, text_size=size.small)
+    table.cell(info_table, 3, 4, last_signal_text, text_color=text_color, bgcolor=last_signal_color, text_size=size.small)
+    table.cell(info_table, 4, 4, last_signal_text, text_color=text_color, bgcolor=last_signal_color, text_size=size.small)
 
 // ============================================================================
 // ALERTS
 // ============================================================================
 
-// Entry alerts
+// Entry alerts - Original detailed condition logic
 if long_condition
     alert("🟢 Syzygy D+4H+1H+CTF LONG\n" + syminfo.ticker + "\nPrice: " + str.tostring(close, "#.#####"), alert.freq_once_per_bar)
 
 if short_condition
     alert("🔴 Syzygy D+4H+1H+CTF SHORT\n" + syminfo.ticker + "\nPrice: " + str.tostring(close, "#.#####"), alert.freq_once_per_bar)
 
-// CTF and 1H alignment alerts
-if trend_bullish_1h and trend_bullish_curr and macd_line_curr > macd_signal_curr and rsi_curr > 40 and rsi_curr < 80 and volume_high
-    alert("🟢 Syzygy 1H+CTF LONG\n" + syminfo.ticker + "\nPrice: " + str.tostring(close, "#.#####"), alert.freq_once_per_bar)
-
-if trend_bearish_1h and trend_bearish_curr and macd_line_curr < macd_signal_curr and rsi_curr < 60 and rsi_curr > 20 and volume_high
-    alert("🔴 Syzygy 1H+CTF SHORT\n" + syminfo.ticker + "\nPrice: " + str.tostring(close, "#.#####"), alert.freq_once_per_bar)
-
-// CTF, 1H, and 4H alignment alerts
+// 4H+1H+CTF alignment alerts - Original detailed condition logic
 if trend_bullish_4h and trend_bullish_1h and trend_bullish_curr and macd_line_curr > macd_signal_curr and rsi_curr > 40 and rsi_curr < 80 and volume_high
     alert("🟢 Syzygy 4H+1H+CTF LONG\n" + syminfo.ticker + "\nPrice: " + str.tostring(close, "#.#####"), alert.freq_once_per_bar)
 
 if trend_bearish_4h and trend_bearish_1h and trend_bearish_curr and macd_line_curr < macd_signal_curr and rsi_curr < 60 and rsi_curr > 20 and volume_high
     alert("🔴 Syzygy 4H+1H+CTF SHORT\n" + syminfo.ticker + "\nPrice: " + str.tostring(close, "#.#####"), alert.freq_once_per_bar)
+
+// 1H+CTF alignment alerts - Original detailed condition logic
+if trend_bullish_1h and trend_bullish_curr and macd_line_curr > macd_signal_curr and rsi_curr > 40 and rsi_curr < 80 and volume_high
+    alert("🟢 Syzygy 1H+CTF LONG\n" + syminfo.ticker + "\nPrice: " + str.tostring(close, "#.#####"), alert.freq_once_per_bar)
+
+if trend_bearish_1h and trend_bearish_curr and macd_line_curr < macd_signal_curr and rsi_curr < 60 and rsi_curr > 20 and volume_high
+    alert("🔴 Syzygy 1H+CTF SHORT\n" + syminfo.ticker + "\nPrice: " + str.tostring(close, "#.#####"), alert.freq_once_per_bar)
 
 
 

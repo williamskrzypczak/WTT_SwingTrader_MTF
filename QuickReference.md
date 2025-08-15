@@ -1,11 +1,15 @@
-# WTT SwingTrader MTF R1.9 - Quick Reference Guide
+# WTT SwingTrader MTF R1.10 - Quick Reference Guide
 
 ## WaveRider Trading Technologies
 ### Multi-Timeframe Syzygy Trading Indicator
 
 ---
 
-## 🚀 **R1.9 NEW FEATURES**
+## 🚀 **R1.10 NEW FEATURES**
+- **Perfect Triangle-Table-Alert Synchronization**: All visual elements perfectly synchronized
+- **Progressive Triangle Sizing**: Size reflects signal confidence level
+- **Enhanced Text Readability**: Dynamic color adjustment for optimal visibility
+- **Visual Signal Hierarchy**: Large (4 timeframes), Normal (3 timeframes), Small (2 timeframes)
 - **Multi-Timeframe Alert System**: Three distinct signal types with different confidence levels
 - **Color-Coded Signal Triangles**: Visual distinction between signal types for instant recognition
 - **Enhanced Alert Descriptions**: Clear timeframe alignment indicators in alert messages
@@ -90,7 +94,7 @@ Multi-timeframe Syzygy trading indicator that combines Daily trend analysis with
 Price: [CURRENT_PRICE]
 ```
 - **Timeframes**: Daily + 4H + 1H + Current Timeframe
-- **Visual**: Green triangle (long) / Red triangle (short)
+- **Visual**: Large Green triangle (long) / Large Red triangle (short)
 - **Use for**: Major swing trades with highest confidence
 
 ### **🔵 4H+1H+CTF Alerts (High Confidence)**
@@ -100,7 +104,7 @@ Price: [CURRENT_PRICE]
 Price: [CURRENT_PRICE]
 ```
 - **Timeframes**: 4H + 1H + Current Timeframe
-- **Visual**: Blue triangle (long) / Purple triangle (short)
+- **Visual**: Normal Blue triangle (long) / Normal Purple triangle (short)
 - **Use for**: Medium-term trades with high confidence
 
 ### **🟠 1H+CTF Alerts (Medium Confidence)**
@@ -110,7 +114,7 @@ Price: [CURRENT_PRICE]
 Price: [CURRENT_PRICE]
 ```
 - **Timeframes**: 1H + Current Timeframe
-- **Visual**: Orange triangle (long) / Yellow triangle (short)
+- **Visual**: Small Orange triangle (long) / Small Yellow triangle (short)
 - **Use for**: Short-term trades with medium confidence
 
 ### **Trend Change Alerts**
@@ -129,8 +133,12 @@ Price: [CURRENT_PRICE]
 ## 🎯 **VISUAL ELEMENTS**
 
 ### **Signal Markers**
-- **Long Signal**: Orange triangle pointing up (below bar)
-- **Short Signal**: Purple triangle pointing down (above bar)
+- **D+4H+1H+CTF Long**: Large Green triangle pointing up (below bar)
+- **D+4H+1H+CTF Short**: Large Red triangle pointing down (above bar)
+- **4H+1H+CTF Long**: Normal Blue triangle pointing up (below bar)
+- **4H+1H+CTF Short**: Normal Purple triangle pointing down (above bar)
+- **1H+CTF Long**: Small Orange triangle pointing up (below bar)
+- **1H+CTF Short**: Small Yellow triangle pointing down (above bar)
 - **Trend Change**: Small triangles with trend cloud colors
 
 ### **Trend Cloud**
@@ -162,9 +170,13 @@ Price: [CURRENT_PRICE]
 - **ATR**: High/Normal volatility status
 - **Volume**: High/Normal volume status
 
-### **Last Trade Type**
-    - **Syzygy LONG**: Long entry signal
-    - **Syzygy SHORT**: Short entry signal
+### **Last Signal**
+- **D+4H+1H+CTF LONG**: Highest confidence long signal (Green background)
+- **D+4H+1H+CTF SHORT**: Highest confidence short signal (Red background)
+- **4H+1H+CTF LONG**: High confidence long signal (Blue background)
+- **4H+1H+CTF SHORT**: High confidence short signal (Purple background)
+- **1H+CTF LONG**: Medium confidence long signal (Orange background)
+- **1H+CTF SHORT**: Medium confidence short signal (Yellow background, Black text)
 - **TREND BULLISH**: Bullish trend change
 - **TREND BEARISH**: Bearish trend change
 - **NONE**: No recent activity
