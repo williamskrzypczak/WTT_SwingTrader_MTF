@@ -8,18 +8,15 @@
 ## 📋 **TABLE OF CONTENTS**
 
 1. [Introduction](#introduction)
-2. [Installation](#installation)
-3. [Initial Setup](#initial-setup)
-4. [Understanding the Indicator](#understanding-the-indicator)
-5. [Signal Interpretation](#signal-interpretation)
-6. [Visual Elements](#visual-elements)
-7. [Status Table Guide](#status-table-guide)
-8. [Alert System](#alert-system)
-9. [Trading Strategy](#trading-strategy)
-10. [Risk Management](#risk-management)
-11. [Troubleshooting](#troubleshooting)
-12. [Best Practices](#best-practices)
-13. [FAQ](#faq)
+2. [Initial Setup](#initial-setup)
+3. [Understanding the Indicator](#understanding-the-indicator)
+4. [Signal Interpretation](#signal-interpretation)
+5. [Visual Elements](#visual-elements)
+6. [Status Table Guide](#status-table-guide)
+7. [Alert System](#alert-system)
+8. [Best Practices](#best-practices)
+9. [Troubleshooting](#troubleshooting)
+10. [FAQ](#faq)
 
 ---
 
@@ -40,28 +37,6 @@ The **WTT SwingTrader MTF** is a sophisticated multi-timeframe trading indicator
 - **Multi-Timeframe Alignment**: Requires confirmation across timeframes
 - **Volume Validation**: Ensures market participation in signals
 - **Risk Management**: Built-in support for proper position sizing and exits
-
----
-
-## 📥 **INSTALLATION**
-
-### **Step 1: Access TradingView**
-1. Open your web browser and go to [TradingView.com](https://www.tradingview.com)
-2. Sign in to your TradingView account (or create one if needed)
-
-### **Step 2: Open Pine Editor**
-1. Click on **"Pine Editor"** in the bottom toolbar
-2. Or use the keyboard shortcut: **Alt + P** (Windows) / **Option + P** (Mac)
-
-### **Step 3: Import the Indicator**
-1. In the Pine Editor, click **"Open"** in the top menu
-2. Select **"Import from file"**
-3. Navigate to the `WTT_SwingTrader_MTF.pine` file
-4. Click **"Open"** to import the indicator
-
-### **Step 4: Add to Chart**
-1. Click **"Add to Chart"** in the Pine Editor
-2. The indicator will appear on your chart with default settings
 
 ---
 
@@ -253,78 +228,37 @@ Price: 1.08543
 
 ---
 
-## 📈 **TRADING STRATEGY**
+## 💡 **BEST PRACTICES**
 
-### **Entry Strategy**
+### **Before Trading**
+1. **Paper trade first**: Test the indicator without real money
+2. **Study the market**: Understand the instrument you're trading
+3. **Set up alerts**: Configure notifications for signals
+4. **Plan your trades**: Have entry, exit, and risk management ready
 
-#### **Conservative Approach (Recommended)**
-1. **Wait for D+4H+1H+CTF signals** (large triangles)
-2. **Confirm with volume** (should be high)
-3. **Check market conditions** (avoid news events)
-4. **Enter on pullback** to key support/resistance
+### **During Trading**
+1. **Wait for confirmation**: Don't rush into trades
+2. **Check multiple timeframes**: Ensure alignment
+3. **Monitor volume**: High volume confirms signals
+4. **Use proper position sizing**: Never risk too much
 
-#### **Moderate Approach**
-1. **Use 4H+1H+CTF signals** (normal triangles)
-2. **Combine with price action** confirmation
-3. **Enter on breakouts** or pullbacks
-4. **Monitor for higher timeframe alignment**
+### **After Trading**
+1. **Keep a trading journal**: Record all trades and outcomes
+2. **Review performance**: Analyze what worked and what didn't
+3. **Adjust strategy**: Refine based on results
+4. **Stay disciplined**: Stick to your plan
 
-#### **Aggressive Approach**
-1. **Use 1H+CTF signals** (small triangles)
-2. **Require strong momentum** confirmation
-3. **Enter immediately** on signal
-4. **Use tight stops** and quick exits
+### **Market Conditions**
+- **Trending Markets**: Best for D+4H+1H+CTF signals
+- **Ranging Markets**: Use 1H+CTF signals with caution
+- **High Volatility**: Reduce position sizes
+- **Low Volatility**: May have fewer signals
 
-### **Position Sizing**
-- **Conservative**: 1-2% risk per trade
-- **Moderate**: 2-3% risk per trade
-- **Aggressive**: 3-5% risk per trade
-
-### **Entry Timing**
-- **Best**: Wait for pullback to key levels
-- **Good**: Enter on signal with confirmation
-- **Avoid**: Chasing signals after strong moves
-
----
-
-## 🛡️ **RISK MANAGEMENT**
-
-### **Stop Loss Placement**
-
-#### **For Long Trades:**
-- **Conservative**: Below the lower boundary line
-- **Moderate**: Below recent swing low
-- **Aggressive**: Below signal bar low
-
-#### **For Short Trades:**
-- **Conservative**: Above the upper boundary line
-- **Moderate**: Above recent swing high
-- **Aggressive**: Above signal bar high
-
-### **Profit Targets**
-
-#### **Conservative Targets:**
-- **TP1**: 1:1 risk-reward ratio
-- **TP2**: 1:2 risk-reward ratio
-- **TP3**: 1:3 risk-reward ratio
-
-#### **Dynamic Targets:**
-- **Use ATR-based targets**: 2x ATR, 3x ATR, 4x ATR
-- **Target key support/resistance levels**
-- **Use trailing stops** for extended moves
-
-### **Exit Strategies**
-1. **Stop Loss**: Automatic exit at predetermined level
-2. **Take Profit**: Exit at target levels
-3. **Trailing Stop**: Move stop in profit direction
-4. **Time-based Exit**: Exit after predetermined time
-5. **Signal Reversal**: Exit on opposite signal
-
-### **Risk Rules**
-- **Never risk more than 5%** of account on single trade
-- **Maximum 3 open positions** at any time
-- **Avoid trading during major news events**
-- **Don't overtrade** - quality over quantity
+### **Time Management**
+- **Best Trading Hours**: Major session overlaps
+- **Avoid News Events**: High impact news can cause false signals
+- **Weekend Gaps**: Be cautious of Monday openings
+- **Holiday Periods**: Reduced liquidity may affect signals
 
 ---
 
@@ -359,40 +293,6 @@ Price: 1.08543
 - **Disable unnecessary elements**: Turn off EMAs if not needed
 - **Use lower timeframes**: Less data to process
 - **Check internet connection**: For real-time data
-
----
-
-## 💡 **BEST PRACTICES**
-
-### **Before Trading**
-1. **Paper trade first**: Test the indicator without real money
-2. **Study the market**: Understand the instrument you're trading
-3. **Set up alerts**: Configure notifications for signals
-4. **Plan your trades**: Have entry, exit, and risk management ready
-
-### **During Trading**
-1. **Wait for confirmation**: Don't rush into trades
-2. **Check multiple timeframes**: Ensure alignment
-3. **Monitor volume**: High volume confirms signals
-4. **Use proper position sizing**: Never risk too much
-
-### **After Trading**
-1. **Keep a trading journal**: Record all trades and outcomes
-2. **Review performance**: Analyze what worked and what didn't
-3. **Adjust strategy**: Refine based on results
-4. **Stay disciplined**: Stick to your plan
-
-### **Market Conditions**
-- **Trending Markets**: Best for D+4H+1H+CTF signals
-- **Ranging Markets**: Use 1H+CTF signals with caution
-- **High Volatility**: Reduce position sizes
-- **Low Volatility**: May have fewer signals
-
-### **Time Management**
-- **Best Trading Hours**: Major session overlaps
-- **Avoid News Events**: High impact news can cause false signals
-- **Weekend Gaps**: Be cautious of Monday openings
-- **Holiday Periods**: Reduced liquidity may affect signals
 
 ---
 
@@ -438,25 +338,6 @@ Price: 1.08543
 - Support/resistance levels
 - Market structure analysis
 - Fundamental analysis (for longer-term trades)
-
----
-
-## 📞 **SUPPORT & RESOURCES**
-
-### **Documentation**
-- **Quick Reference Guide**: `WTT_SwingTrader_MTF_QuickReference.html`
-- **Trading Plan**: `WTT_SwingTrader_MTF_Trading_Plan.md`
-- **GitHub Repository**: [WTT_SwingTrader_MTF](https://github.com/williamskrzypczak/WTT_SwingTrader_MTF)
-
-### **Recommended Reading**
-- "Technical Analysis of the Financial Markets" by John J. Murphy
-- "Trading in the Zone" by Mark Douglas
-- "The Disciplined Trader" by Mark Douglas
-
-### **Practice Resources**
-- **TradingView Paper Trading**: Practice without risk
-- **Demo Accounts**: Test with virtual money
-- **Trading Simulators**: Improve skills
 
 ---
 
